@@ -36,10 +36,27 @@
       implementationClass="lt.martynassateika.idea.codeigniter.language.LanguageFoldingBuilder"/>
     <completion.contributor language="PHP"
       implementationClass="lt.martynassateika.idea.codeigniter.contributor.MyCompletionContributor"/>
+
+    <projectConfigurable id="CodeIgniter.SettingsConfigurable"
+      instance="lt.martynassateika.idea.codeigniter.ui.CodeIgniterSettingsConfigurable"
+      displayName="CodeIgniter"
+      parentId="reference.webide.settings.project.settings.php"
+      nonDefaultProject="true"/>
   </extensions>
 
   <actions>
     <!-- Add your actions here -->
   </actions>
+
+  <project-components>
+    <component>
+      <implementation-class>lt.martynassateika.idea.codeigniter.CodeIgniterProjectSettings
+      </implementation-class>
+    </component>
+    <component>
+      <implementation-class>lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent
+      </implementation-class>
+    </component>
+  </project-components>
 
 </idea-plugin>

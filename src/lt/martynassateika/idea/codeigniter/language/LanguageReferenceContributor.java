@@ -30,6 +30,7 @@ import com.jetbrains.php.lang.psi.elements.AssignmentExpression;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import java.util.ArrayList;
 import java.util.List;
+import lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent;
 import lt.martynassateika.idea.codeigniter.psi.MyPsiReference;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,21 +51,23 @@ public class LanguageReferenceContributor extends PsiReferenceContributor {
           @Override
           public PsiReference[] getReferencesByElement(@NotNull PsiElement psiElement,
               @NotNull ProcessingContext processingContext) {
-            if (psiElement instanceof StringLiteralExpression) {
-              StringLiteralExpression stringLiteralExpression = (StringLiteralExpression) psiElement;
-              Project project = psiElement.getProject();
-              List<AssignmentExpression> translations = CiLanguageUtil
-                  .findTranslationsFor(project, psiElement.getText());
-              List<PsiReference> references = new ArrayList<>(translations.size());
-              for (AssignmentExpression translation : translations) {
-                ArrayAccessExpression arrayAccessExpression = (ArrayAccessExpression) translation
-                    .getVariable();
-                if (arrayAccessExpression != null) {
-                  ArrayIndex index = arrayAccessExpression.getIndex();
-                  references.add(new MyPsiReference(index, stringLiteralExpression));
+            Project project = psiElement.getProject();
+            if (CodeIgniterProjectComponent.isEnabled(project)) {
+              if (psiElement instanceof StringLiteralExpression) {
+                StringLiteralExpression stringLiteralExpression = (StringLiteralExpression) psiElement;
+                List<AssignmentExpression> translations = CiLanguageUtil
+                    .findTranslationsFor(project, psiElement.getText());
+                List<PsiReference> references = new ArrayList<>(translations.size());
+                for (AssignmentExpression translation : translations) {
+                  ArrayAccessExpression arrayAccessExpression = (ArrayAccessExpression) translation
+                      .getVariable();
+                  if (arrayAccessExpression != null) {
+                    ArrayIndex index = arrayAccessExpression.getIndex();
+                    references.add(new MyPsiReference(index, stringLiteralExpression));
+                  }
                 }
+                return references.toArray(PsiReference.EMPTY_ARRAY);
               }
-              return references.toArray(PsiReference.EMPTY_ARRAY);
             }
             return PsiReference.EMPTY_ARRAY;
           }

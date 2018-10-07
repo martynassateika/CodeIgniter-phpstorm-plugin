@@ -39,6 +39,7 @@ import com.jetbrains.php.lang.psi.elements.ParameterList;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import java.util.Collection;
 import java.util.Collections;
+import lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent;
 import lt.martynassateika.idea.codeigniter.psi.MyPsiUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,20 +57,25 @@ public class LanguageCompletionProvider extends CompletionProvider<CompletionPar
     PsiElement originalPosition = completionParameters.getOriginalPosition();
     if (originalPosition != null) {
       Project project = originalPosition.getProject();
-      if (isFirstArgumentInLangCall(originalPosition)) {
-        FileBasedIndex index = FileBasedIndex.getInstance();
-        Collection<String> allKeys = index
-            .getAllKeys(LanguageFileIndex.KEY, project);
-        for (String key : allKeys) {
-          index.getFilesWithKey(LanguageFileIndex.KEY, Collections.singleton(key),
-              file -> {
-                completionResultSet
-                    .addElement(
-                        new LanguageLookupElement(StringUtil.unquoteString(key), file));
-                return false;
-              }, GlobalSearchScope
-                  .getScopeRestrictedByFileTypes(GlobalSearchScope.allScope(project),
-                      PhpFileType.INSTANCE));
+      if (CodeIgniterProjectComponent.isEnabled(project)) {
+        if (isFirstArgumentInLangCall(originalPosition)) {
+          FileBasedIndex index = FileBasedIndex.getInstance();
+          Collection<String> allKeys = index.getAllKeys(LanguageFileIndex.KEY, project);
+          for (String key : allKeys) {
+            index.getFilesWithKey(LanguageFileIndex.KEY, Collections.singleton(key),
+                file -> {
+                  LanguageLookupElement lookupElement = new LanguageLookupElement(
+                      StringUtil.unquoteString(key),
+                      file
+                  );
+                  completionResultSet.addElement(lookupElement);
+                  return false;
+                }, GlobalSearchScope.getScopeRestrictedByFileTypes(
+                    GlobalSearchScope.allScope(project),
+                    PhpFileType.INSTANCE
+                )
+            );
+          }
         }
       }
     }

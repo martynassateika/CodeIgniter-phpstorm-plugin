@@ -31,6 +31,7 @@ import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,6 +47,11 @@ public class LanguageFoldingBuilder extends FoldingBuilderEx {
   @Override
   public FoldingDescriptor[] buildFoldRegions(@NotNull PsiElement psiElement,
       @NotNull Document document, boolean quick) {
+    Project project = psiElement.getProject();
+    if (!CodeIgniterProjectComponent.isEnabled(project)) {
+      return FoldingDescriptor.EMPTY;
+    }
+
     List<FoldingDescriptor> descriptors = new ArrayList<>();
     Collection<FunctionReference> functionReferences = PsiTreeUtil
         .findChildrenOfType(psiElement, FunctionReference.class);
@@ -55,7 +61,6 @@ public class LanguageFoldingBuilder extends FoldingBuilderEx {
         if (parameters.length > 0) {
           PsiElement firstParameter = parameters[0];
           if (firstParameter instanceof StringLiteralExpression) {
-            Project project = firstParameter.getProject();
             descriptors.add(
                 new FoldingDescriptor(firstParameter.getNode(), firstParameter.getTextRange()) {
                   @Nullable
