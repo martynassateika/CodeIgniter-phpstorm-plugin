@@ -1,0 +1,62 @@
+<idea-plugin>
+  <id>lt.martynassateika.idea.codeigniter</id>
+  <name>CodeIgniter Plugin</name>
+  <version>0.1.0</version>
+  <vendor url="http://www.martynassateika.lt">Martynas Sateika</vendor>
+
+  <description><![CDATA[
+      A PhpStorm plugin for CodeIgniter development.
+    ]]></description>
+
+  <change-notes><![CDATA[
+      0.1.0 (2018-10-07):
+      <ul>
+          <li>Completion provider for translations</li>
+          <li>Reference contributor for translations</li>
+          <li>Folding builder for translations</li>
+      </ul>
+    ]]>
+  </change-notes>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+  <idea-version since-build="145.0"/>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+  <depends>com.jetbrains.php</depends>
+  <depends>com.intellij.modules.platform</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+    <fileBasedIndex
+      implementation="lt.martynassateika.idea.codeigniter.language.LanguageFileIndex"/>
+    <psi.referenceContributor language="PHP"
+      implementation="lt.martynassateika.idea.codeigniter.language.LanguageReferenceContributor"/>
+    <lang.foldingBuilder language="PHP"
+      implementationClass="lt.martynassateika.idea.codeigniter.language.LanguageFoldingBuilder"/>
+    <completion.contributor language="PHP"
+      implementationClass="lt.martynassateika.idea.codeigniter.contributor.MyCompletionContributor"/>
+
+    <projectConfigurable id="CodeIgniter.SettingsConfigurable"
+      instance="lt.martynassateika.idea.codeigniter.ui.CodeIgniterSettingsConfigurable"
+      displayName="CodeIgniter"
+      parentId="reference.webide.settings.project.settings.php"
+      nonDefaultProject="true"/>
+  </extensions>
+
+  <actions>
+    <!-- Add your actions here -->
+  </actions>
+
+  <project-components>
+    <component>
+      <implementation-class>lt.martynassateika.idea.codeigniter.CodeIgniterProjectSettings
+      </implementation-class>
+    </component>
+    <component>
+      <implementation-class>lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent
+      </implementation-class>
+    </component>
+  </project-components>
+
+</idea-plugin>
