@@ -14,22 +14,30 @@
  * limitations under the License.
  */
 
-package lt.martynassateika.idea.codeigniter;
+package lt.martynassateika.idea.codeigniter.inspection;
 
-import com.intellij.openapi.components.ProjectComponent;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.project.Project;
+import com.jetbrains.php.lang.inspections.PhpInspection;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NotNull;
 
 /**
+ * Base class for CodeIgniter-specific inspections.
+ *
  * @author martynas.sateika
- * @since 0.1.0
+ * @since 0.2.0
  */
-public class CodeIgniterProjectComponent implements ProjectComponent {
+public abstract class CodeIgniterInspection extends PhpInspection {
 
-  public static boolean isEnabled(Project project) {
-    CodeIgniterProjectSettings settings = ServiceManager
-        .getService(project, CodeIgniterProjectSettings.class);
-    return settings.isEnabled();
+  @Nls
+  @NotNull
+  @Override
+  public String getGroupDisplayName() {
+    return "CodeIgniter";
+  }
+
+  @Override
+  public boolean isEnabledByDefault() {
+    return true;
   }
 
 }

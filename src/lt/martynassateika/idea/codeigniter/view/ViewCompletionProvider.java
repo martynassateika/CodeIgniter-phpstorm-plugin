@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package lt.martynassateika.idea.codeigniter.language;
+package lt.martynassateika.idea.codeigniter.view;
 
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
@@ -22,59 +22,66 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileVisitor;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFileSystemItem;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.ProcessingContext;
-import com.intellij.util.indexing.FileBasedIndex;
-import com.jetbrains.php.lang.PhpFileType;
 import com.jetbrains.php.lang.PhpLanguage;
 import com.jetbrains.php.lang.psi.elements.FunctionReference;
 import com.jetbrains.php.lang.psi.elements.ParameterList;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
+import javax.swing.Icon;
 import lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent;
 import lt.martynassateika.idea.codeigniter.psi.MyPsiUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Provides possible language keys for 'lang' calls.
+ * Provides relative paths for 'view()' calls.
  *
  * @author martynas.sateika
- * @since 0.1.0
+ * @since 0.2.0
  */
-public class LanguageCompletionProvider extends CompletionProvider<CompletionParameters> {
+public class ViewCompletionProvider extends CompletionProvider<CompletionParameters> {
 
   @Override
   protected void addCompletions(@NotNull CompletionParameters completionParameters,
-      ProcessingContext processingContext, @NotNull CompletionResultSet completionResultSet) {
+      ProcessingContext processingContext, @NotNull CompletionResultSet resultSet) {
     PsiElement originalPosition = completionParameters.getOriginalPosition();
     if (originalPosition != null) {
       Project project = originalPosition.getProject();
       if (CodeIgniterProjectComponent.isEnabled(project)) {
-        if (isFirstArgumentInLangCall(originalPosition)) {
-          FileBasedIndex index = FileBasedIndex.getInstance();
-          Collection<String> allKeys = index.getAllKeys(LanguageFileIndex.KEY, project);
-          for (String key : allKeys) {
-            index.getFilesWithKey(LanguageFileIndex.KEY, Collections.singleton(key),
-                file -> {
-                  LanguageLookupElement lookupElement = new LanguageLookupElement(
-                      StringUtil.unquoteString(key),
-                      file
-                  );
-                  completionResultSet.addElement(lookupElement);
-                  return false;
-                }, GlobalSearchScope.getScopeRestrictedByFileTypes(
-                    GlobalSearchScope.allScope(project),
-                    PhpFileType.INSTANCE
-                )
-            );
+        if (isViewNameElement(originalPosition)) {
+          List<PsiFileSystemItem> viewDirectories = CiViewUtil.getViewDirectories(project);
+          for (PsiFileSystemItem viewDirectory : viewDirectories) {
+            VirtualFile directoryVirtualFile = viewDirectory.getVirtualFile();
+            VirtualFile applicationDirectory = directoryVirtualFile.getParent();
+            VfsUtil
+                .visitChildrenRecursively(directoryVirtualFile, new VirtualFileVisitor<Object>() {
+                  @Override
+                  public boolean visitFile(@NotNull VirtualFile file) {
+                    if (!file.isDirectory()) {
+                      String relativePath = VfsUtil
+                          .findRelativePath(directoryVirtualFile, file, '/');
+                      if (StringUtil.isNotEmpty(relativePath)) {
+                        Icon icon = file.getFileType().getIcon();
+                        resultSet.addElement(new ViewLookupElement(
+                            relativePath,
+                            applicationDirectory,
+                            icon
+                        ));
+                      }
+                    }
+                    return true;
+                  }
+                });
           }
         }
       }
@@ -82,21 +89,21 @@ public class LanguageCompletionProvider extends CompletionProvider<CompletionPar
   }
 
   /**
-   * @param element location at caret
-   * @return true if the caret is in the first argument position within a call to 'lang'
+   * @param element a PSI element
+   * @return true if the element is in the first argument position within a call to 'load->view()'
    */
-  private static boolean isFirstArgumentInLangCall(PsiElement element) {
+  private static boolean isViewNameElement(PsiElement element) {
     StringLiteralExpression literalExpression = MyPsiUtil
         .getParentOfType(element, StringLiteralExpression.class);
     if (literalExpression != null) {
-      return MyPsiUtil.isArgumentOfFunction(literalExpression, "lang", 0);
+      return CiViewUtil.isArgumentOfLoadView(literalExpression, 0);
     }
     return false;
   }
 
   @NotNull
   public static PsiElementPattern.Capture<LeafPsiElement> getPlace() {
-    // lang('foo');
+    // view('foo');
     return PlatformPatterns
         .psiElement(LeafPsiElement.class)
         .withParent(StringLiteralExpression.class)
@@ -105,30 +112,35 @@ public class LanguageCompletionProvider extends CompletionProvider<CompletionPar
         .withLanguage(PhpLanguage.INSTANCE);
   }
 
-  private static class LanguageLookupElement extends LookupElement {
+  private static class ViewLookupElement extends LookupElement {
 
     @NotNull
-    private final String languageKey;
+    private final String relativePath;
 
     @NotNull
-    private final VirtualFile file;
+    private final VirtualFile applicationDirectory;
 
-    LanguageLookupElement(@NotNull String languageKey, @NotNull VirtualFile file) {
-      this.languageKey = languageKey;
-      this.file = file;
+    @Nullable
+    private final Icon icon;
+
+    ViewLookupElement(@NotNull String relativePath, @NotNull VirtualFile applicationDirectory,
+        @Nullable Icon icon) {
+      this.relativePath = relativePath;
+      this.applicationDirectory = applicationDirectory;
+      this.icon = icon;
     }
 
     @NotNull
     @Override
     public String getLookupString() {
-      return languageKey;
+      return relativePath;
     }
 
     @Override
     public void renderElement(LookupElementPresentation presentation) {
       super.renderElement(presentation);
-      presentation.setIcon(IconLoader.findIcon("/icons/php-icon.png"));
-      presentation.setTypeText(file.getNameWithoutExtension());
+      presentation.setIcon(icon);
+      presentation.setTypeText(applicationDirectory.getName());
       presentation.setTypeGrayed(true);
     }
 

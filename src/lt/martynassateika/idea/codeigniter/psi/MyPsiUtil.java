@@ -17,6 +17,10 @@
 package lt.martynassateika.idea.codeigniter.psi;
 
 import com.intellij.psi.PsiElement;
+import com.jetbrains.php.lang.psi.elements.FieldReference;
+import com.jetbrains.php.lang.psi.elements.FunctionReference;
+import com.jetbrains.php.lang.psi.elements.MethodReference;
+import com.jetbrains.php.lang.psi.elements.ParameterList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,6 +51,57 @@ public class MyPsiUtil {
       }
     }
     return null;
+  }
+
+  /**
+   * @param element an element
+   * @param functionName function name
+   * @param idx function parameter index (0-based)
+   * @return true if the element is in argument #{@code idx} of function {@code functionName}
+   */
+  public static boolean isArgumentOfFunction(PsiElement element, String functionName, int idx) {
+    ParameterList parameterList = MyPsiUtil
+        .getParentOfType(element, ParameterList.class);
+    if (parameterList != null) {
+      PsiElement[] parameters = parameterList.getParameters();
+      if (parameters.length > idx && parameters[idx] == element) {
+        FunctionReference functionReference = MyPsiUtil
+            .getParentOfType(parameterList, FunctionReference.class);
+        return functionReference != null && functionName.equals(functionReference.getName());
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Helps spot arguments of methods such as {@code $this->load->view('foo')}.
+   *
+   * @param element an element
+   * @param fieldName field name
+   * @param methodName method name
+   * @param idx method parameter index (0-based)
+   * @return true if the element is in argument #{@code idx} of method {@code methodName}
+   */
+  public static boolean isArgumentOfMethod(PsiElement element, String fieldName, String methodName,
+      int idx) {
+    ParameterList parameterList = MyPsiUtil
+        .getParentOfType(element, ParameterList.class);
+    if (parameterList != null) {
+      PsiElement[] parameters = parameterList.getParameters();
+      if (parameters.length > idx && parameters[idx] == element) {
+        // Find method reference, e.g. 'view'
+        MethodReference methodReference = MyPsiUtil
+            .getParentOfType(parameterList, MethodReference.class);
+        if (methodReference != null && methodName.equals(methodReference.getName())) {
+          // Find field reference, e.g. 'load'
+          PsiElement firstChild = methodReference.getFirstChild();
+          if (firstChild instanceof FieldReference) {
+            return fieldName.equals(((FieldReference) firstChild).getName());
+          }
+        }
+      }
+    }
+    return false;
   }
 
 }
