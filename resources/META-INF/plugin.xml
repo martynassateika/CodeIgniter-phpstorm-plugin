@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>lt.martynassateika.idea.codeigniter</id>
   <name>CodeIgniter Plugin</name>
-  <version>0.1.0</version>
+  <version>0.2.0</version>
   <vendor url="http://www.martynassateika.lt">Martynas Sateika</vendor>
 
   <description><![CDATA[
@@ -9,6 +9,15 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      0.2.0 (2018-10-09):
+      <ul>
+          <li>Completion provider for view files</li>
+          <li>Reference contributor for view files</li>
+          <li>Inspection "Returned view not used"</li>
+          <li>Inspection "Simplifiable view name"</li>
+          <li>Inspection "View does not exist"</li>
+      </ul>
+
       0.1.0 (2018-10-07):
       <ul>
           <li>Completion provider for translations</li>
