@@ -27,7 +27,7 @@
   <depends>com.intellij.modules.platform</depends>
 
   <extensions defaultExtensionNs="com.intellij">
-    <!-- Add your extensions here -->
+    <!-- Language helper -->
     <fileBasedIndex
       implementation="lt.martynassateika.idea.codeigniter.language.LanguageFileIndex"/>
     <psi.referenceContributor language="PHP"
@@ -36,6 +36,10 @@
       implementationClass="lt.martynassateika.idea.codeigniter.language.LanguageFoldingBuilder"/>
     <completion.contributor language="PHP"
       implementationClass="lt.martynassateika.idea.codeigniter.contributor.MyCompletionContributor"/>
+
+    <!-- Views -->
+    <psi.referenceContributor
+      implementation="lt.martynassateika.idea.codeigniter.view.ViewReferenceContributor"/>
 
     <projectConfigurable id="CodeIgniter.SettingsConfigurable"
       instance="lt.martynassateika.idea.codeigniter.ui.CodeIgniterSettingsConfigurable"

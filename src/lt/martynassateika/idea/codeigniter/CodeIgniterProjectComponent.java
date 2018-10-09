@@ -21,11 +21,8 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 
 /**
- * <p>Provides ...</p>
- * <p>
- * <p>Created on 07/10/2018 by martynas.sateika</p>
- *
  * @author martynas.sateika
+ * @since 0.1.0
  */
 public class CodeIgniterProjectComponent implements ProjectComponent {
 
