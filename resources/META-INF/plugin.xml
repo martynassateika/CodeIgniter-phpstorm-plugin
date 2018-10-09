@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>lt.martynassateika.idea.codeigniter</id>
-  <name>CodeIgniter Plugin</name>
-  <version>0.2.0</version>
+  <name>CodeIgniter</name>
+  <version>0.2.1</version>
   <vendor url="http://www.martynassateika.lt">Martynas Sateika</vendor>
 
   <description><![CDATA[
@@ -9,6 +9,11 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      0.2.1 (2018-10-10):
+      <ul>
+          <li>Rename plugin to "CodeIgniter"</li>
+      </ul>
+
       0.2.0 (2018-10-09):
       <ul>
           <li>Completion provider for view files</li>
