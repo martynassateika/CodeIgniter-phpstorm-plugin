@@ -45,7 +45,7 @@ class PhpExtensionUtil {
    * @return the path with the PHP extension removed, if present
    */
   static String removeIfPresent(@NotNull String path) {
-    if (PhpNameUtil.getExtension(path).equals("php")) {
+    if ("php".equals(PathUtil.getFileExtension(path))) {
       return PhpNameUtil.getNameWithoutExtension(path);
     }
     return path;

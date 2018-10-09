@@ -27,6 +27,9 @@
   <depends>com.intellij.modules.platform</depends>
 
   <extensions defaultExtensionNs="com.intellij">
+    <inspectionToolProvider
+      implementation="lt.martynassateika.idea.codeigniter.inspection.CiInspectionToolProvider"/>
+
     <!-- Language helper -->
     <fileBasedIndex
       implementation="lt.martynassateika.idea.codeigniter.language.LanguageFileIndex"/>
