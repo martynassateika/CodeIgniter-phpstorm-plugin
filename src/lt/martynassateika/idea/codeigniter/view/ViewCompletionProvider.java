@@ -19,8 +19,6 @@ package lt.martynassateika.idea.codeigniter.view;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VfsUtil;
@@ -39,9 +37,9 @@ import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import java.util.List;
 import javax.swing.Icon;
 import lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent;
+import lt.martynassateika.idea.codeigniter.contributor.BasicFileLookupElement;
 import lt.martynassateika.idea.codeigniter.psi.MyPsiUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Provides relative paths for 'view()' calls.
@@ -72,7 +70,7 @@ public class ViewCompletionProvider extends CompletionProvider<CompletionParamet
                           .findRelativePath(directoryVirtualFile, file, '/');
                       if (StringUtil.isNotEmpty(relativePath)) {
                         Icon icon = file.getFileType().getIcon();
-                        resultSet.addElement(new ViewLookupElement(
+                        resultSet.addElement(new BasicFileLookupElement(
                             relativePath,
                             applicationDirectory,
                             icon
@@ -110,40 +108,6 @@ public class ViewCompletionProvider extends CompletionProvider<CompletionParamet
         .withSuperParent(2, ParameterList.class)
         .withSuperParent(3, FunctionReference.class)
         .withLanguage(PhpLanguage.INSTANCE);
-  }
-
-  private static class ViewLookupElement extends LookupElement {
-
-    @NotNull
-    private final String relativePath;
-
-    @NotNull
-    private final VirtualFile applicationDirectory;
-
-    @Nullable
-    private final Icon icon;
-
-    ViewLookupElement(@NotNull String relativePath, @NotNull VirtualFile applicationDirectory,
-        @Nullable Icon icon) {
-      this.relativePath = relativePath;
-      this.applicationDirectory = applicationDirectory;
-      this.icon = icon;
-    }
-
-    @NotNull
-    @Override
-    public String getLookupString() {
-      return relativePath;
-    }
-
-    @Override
-    public void renderElement(LookupElementPresentation presentation) {
-      super.renderElement(presentation);
-      presentation.setIcon(icon);
-      presentation.setTypeText(applicationDirectory.getName());
-      presentation.setTypeGrayed(true);
-    }
-
   }
 
 }
