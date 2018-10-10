@@ -44,6 +44,10 @@
     <inspectionToolProvider
       implementation="lt.martynassateika.idea.codeigniter.inspection.CiInspectionToolProvider"/>
 
+    <!-- Helpers -->
+    <psi.referenceContributor
+      implementation="lt.martynassateika.idea.codeigniter.helper.HelperReferenceContributor"/>
+
     <!-- Language helper -->
     <fileBasedIndex
       implementation="lt.martynassateika.idea.codeigniter.language.LanguageFileIndex"/>
