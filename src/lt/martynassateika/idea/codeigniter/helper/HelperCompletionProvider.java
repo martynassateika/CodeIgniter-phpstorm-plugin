@@ -49,7 +49,7 @@ public class HelperCompletionProvider extends CompletionProvider<CompletionParam
 
   @Override
   protected void addCompletions(@NotNull CompletionParameters completionParameters,
-      ProcessingContext processingContext, @NotNull CompletionResultSet resultSet) {
+      @NotNull ProcessingContext processingContext, @NotNull CompletionResultSet resultSet) {
     PsiElement originalPosition = completionParameters.getOriginalPosition();
     if (shouldShowSuggestions(originalPosition)) {
       Project project = originalPosition.getProject();

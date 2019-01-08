@@ -51,7 +51,7 @@ public class ViewCompletionProvider extends CompletionProvider<CompletionParamet
 
   @Override
   protected void addCompletions(@NotNull CompletionParameters completionParameters,
-      ProcessingContext processingContext, @NotNull CompletionResultSet resultSet) {
+      @NotNull ProcessingContext processingContext, @NotNull CompletionResultSet resultSet) {
     PsiElement originalPosition = completionParameters.getOriginalPosition();
     if (originalPosition != null) {
       Project project = originalPosition.getProject();

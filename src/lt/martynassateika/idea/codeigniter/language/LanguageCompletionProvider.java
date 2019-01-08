@@ -53,7 +53,7 @@ public class LanguageCompletionProvider extends CompletionProvider<CompletionPar
 
   @Override
   protected void addCompletions(@NotNull CompletionParameters completionParameters,
-      ProcessingContext processingContext, @NotNull CompletionResultSet completionResultSet) {
+      @NotNull ProcessingContext processingContext, @NotNull CompletionResultSet completionResultSet) {
     PsiElement originalPosition = completionParameters.getOriginalPosition();
     if (originalPosition != null) {
       Project project = originalPosition.getProject();
