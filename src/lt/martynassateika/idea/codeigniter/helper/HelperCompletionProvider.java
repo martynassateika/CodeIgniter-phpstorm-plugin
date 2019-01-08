@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package lt.martynassateika.idea.codeigniter.view;
+package lt.martynassateika.idea.codeigniter.helper;
 
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
@@ -31,8 +31,6 @@ import com.intellij.psi.PsiFileSystemItem;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.util.ProcessingContext;
 import com.jetbrains.php.lang.PhpLanguage;
-import com.jetbrains.php.lang.psi.elements.FunctionReference;
-import com.jetbrains.php.lang.psi.elements.ParameterList;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import java.util.List;
 import javax.swing.Icon;
@@ -42,71 +40,75 @@ import lt.martynassateika.idea.codeigniter.psi.MyPsiUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Provides relative paths for 'view()' calls.
+ * Provides relative paths for 'helper()' calls.
  *
  * @author martynas.sateika
- * @since 0.2.0
+ * @since 0.3.0
  */
-public class ViewCompletionProvider extends CompletionProvider<CompletionParameters> {
+public class HelperCompletionProvider extends CompletionProvider<CompletionParameters> {
 
   @Override
   protected void addCompletions(@NotNull CompletionParameters completionParameters,
       @NotNull ProcessingContext processingContext, @NotNull CompletionResultSet resultSet) {
     PsiElement originalPosition = completionParameters.getOriginalPosition();
-    if (originalPosition != null) {
+    if (shouldShowSuggestions(originalPosition)) {
       Project project = originalPosition.getProject();
-      if (CodeIgniterProjectComponent.isEnabled(project)) {
-        if (isViewNameElement(originalPosition)) {
-          List<PsiFileSystemItem> viewDirectories = CiViewUtil.getViewDirectories(project);
-          for (PsiFileSystemItem viewDirectory : viewDirectories) {
-            VirtualFile directoryVirtualFile = viewDirectory.getVirtualFile();
-            VirtualFile applicationDirectory = directoryVirtualFile.getParent();
-            VfsUtil
-                .visitChildrenRecursively(directoryVirtualFile, new VirtualFileVisitor<Object>() {
-                  @Override
-                  public boolean visitFile(@NotNull VirtualFile file) {
-                    if (!file.isDirectory()) {
-                      String relativePath = VfsUtil
-                          .findRelativePath(directoryVirtualFile, file, '/');
-                      if (StringUtil.isNotEmpty(relativePath)) {
-                        Icon icon = file.getFileType().getIcon();
-                        resultSet.addElement(new BasicFileLookupElement(
-                            relativePath,
-                            applicationDirectory,
-                            icon
-                        ));
-                      }
+      List<PsiFileSystemItem> helperDirectories = CiHelperUtil.getHelperDirectories(project);
+      for (PsiFileSystemItem helperDirectory : helperDirectories) {
+        VirtualFile directoryVirtualFile = helperDirectory.getVirtualFile();
+        VirtualFile applicationDirectory = directoryVirtualFile.getParent();
+        VfsUtil
+            .visitChildrenRecursively(directoryVirtualFile, new VirtualFileVisitor<Object>() {
+              @Override
+              public boolean visitFile(@NotNull VirtualFile file) {
+                if (CiHelperUtil.isHelperFile(file)) {
+                  String relativePath = VfsUtil
+                      .findRelativePath(directoryVirtualFile, file, '/');
+                  if (relativePath != null) {
+                    String formattedRelativePath = CiHelperUtil
+                        .formatHelperPath(relativePath);
+                    if (StringUtil.isNotEmpty(relativePath)) {
+                      Icon icon = file.getFileType().getIcon();
+                      resultSet.addElement(new BasicFileLookupElement(
+                          formattedRelativePath,
+                          applicationDirectory,
+                          icon
+                      ));
                     }
-                    return true;
                   }
-                });
-          }
-        }
+                }
+                return true;
+              }
+            });
       }
     }
   }
 
   /**
-   * @param element a PSI element
-   * @return true if the element is in the first argument position within a call to 'load->view()'
+   * @param originalPosition original position
+   * @return if suggestions should be shown
    */
-  private static boolean isViewNameElement(PsiElement element) {
-    StringLiteralExpression literalExpression = MyPsiUtil
-        .getParentOfType(element, StringLiteralExpression.class);
-    if (literalExpression != null) {
-      return CiViewUtil.isArgumentOfLoadView(literalExpression, 0);
+  private static boolean shouldShowSuggestions(PsiElement originalPosition) {
+    if (originalPosition != null) {
+      Project project = originalPosition.getProject();
+      if (CodeIgniterProjectComponent.isEnabled(project)) {
+        StringLiteralExpression literalExpression = MyPsiUtil
+            .getParentOfType(originalPosition, StringLiteralExpression.class);
+        if (literalExpression != null) {
+          return CiHelperUtil.isHelperNameElement(literalExpression);
+        }
+      }
     }
     return false;
   }
 
   @NotNull
   public static PsiElementPattern.Capture<LeafPsiElement> getPlace() {
-    // view('foo');
+    // helper('foo')
+    // helper(array('foo', 'bar', 'baz'))
     return PlatformPatterns
         .psiElement(LeafPsiElement.class)
         .withParent(StringLiteralExpression.class)
-        .withSuperParent(2, ParameterList.class)
-        .withSuperParent(3, FunctionReference.class)
         .withLanguage(PhpLanguage.INSTANCE);
   }
 

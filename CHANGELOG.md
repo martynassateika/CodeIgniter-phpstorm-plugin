@@ -1,5 +1,10 @@
 Changelog
 =========
+## [0.3.0] - 2019-01-08
+### Added
+- Completion provider for helper files
+- Reference contributor for helper files
+
 ## [0.2.1] - 2018-10-10
 ### Fixed
 - Rename plugin to "CodeIgniter"
@@ -18,5 +23,6 @@ Changelog
 - Reference contributor for translations
 - Folding builder for translations
 
-[0.2.1]: https://github.com/martynassateika/FUEL-CMS-phpstorm-plugin/compare/0.2.0...0.2.1
+[0.3.0]: https://github.com/martynassateika/CodeIgniter-phpstorm-plugin/compare/0.2.1...0.3.0
+[0.2.1]: https://github.com/martynassateika/CodeIgniter-phpstorm-plugin/compare/0.2.0...0.2.1
 [0.2.0]: https://github.com/martynassateika/CodeIgniter-phpstorm-plugin/compare/0.1.0...0.2.0
