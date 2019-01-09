@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package lt.martynassateika.idea.codeigniter.view;
+package lt.martynassateika.idea.codeigniter.model;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -28,62 +28,61 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import lt.martynassateika.idea.codeigniter.PhpExtensionUtil;
 import lt.martynassateika.idea.codeigniter.psi.MyPsiUtil;
 
 /**
- * Utility methods related to the CI Views.
+ * Utility methods related to the CI Models.
  *
  * @author martynas.sateika
- * @since 0.2.0
+ * @since 0.4.0
  */
-class CiViewUtil {
+public class CiModelUtil {
 
   /**
-   * Returns a list of view files whose relative path from a view directory equals the supplied
+   * Returns a list of model files whose relative path from a model directory equals the supplied
    * relative path.
    *
-   * @param relativePath relative path to a view file
+   * @param relativePath relative path to a model file
    * @param project current project
-   * @return list of all matching view files
+   * @return list of all matching model files
    */
-  static List<PsiFile> findViewFiles(String relativePath, Project project) {
+  static List<PsiFile> findModelFiles(String relativePath, Project project) {
     PsiManager psiManager = PsiManager.getInstance(project);
 
     // If no extension is specified, it's a PHP file
-    relativePath = PhpExtensionUtil.addIfMissing(relativePath);
+    // relativePath = PhpExtensionUtil.addIfMissing(relativePath);
 
-    List<PsiFile> viewFiles = new ArrayList<>();
-    for (PsiFileSystemItem fileSystemItem : getViewDirectories(project)) {
-      VirtualFile viewDirectory = fileSystemItem.getVirtualFile();
-      VirtualFile viewFile = viewDirectory.findFileByRelativePath(relativePath);
-      if (viewFile != null && !viewFile.isDirectory()) {
-        PsiFile psiFile = psiManager.findFile(viewFile);
+    List<PsiFile> modelFiles = new ArrayList<>();
+    for (PsiFileSystemItem fileSystemItem : getModelDirectories(project)) {
+      VirtualFile modelDirectory = fileSystemItem.getVirtualFile();
+      VirtualFile modelFile = modelDirectory.findFileByRelativePath(relativePath);
+      if (modelFile != null && !modelFile.isDirectory()) {
+        PsiFile psiFile = psiManager.findFile(modelFile);
         if (psiFile != null) {
-          viewFiles.add(psiFile);
+          modelFiles.add(psiFile);
         }
       }
     }
-    return viewFiles;
+    return modelFiles;
   }
 
   /**
    * @param project current project
-   * @return all directories called 'views' in the project
+   * @return all directories called 'models' in the project
    */
-  static List<PsiFileSystemItem> getViewDirectories(Project project) {
+  static List<PsiFileSystemItem> getModelDirectories(Project project) {
     GlobalSearchScope scope = GlobalSearchScope.allScope(project);
-    PsiFileSystemItem[] items = FilenameIndex.getFilesByName(project, "views", scope, true);
+    PsiFileSystemItem[] items = FilenameIndex.getFilesByName(project, "models", scope, true);
     return Arrays.stream(items).filter(PsiFileSystemItem::isDirectory).collect(Collectors.toList());
   }
 
   /**
    * @param element an element
    * @param argIndex method parameter index (0-based)
-   * @return {@code true} if {@code element} is an argument of a {@code load->view()} call
+   * @return {@code true} if {@code element} is an argument of a {@code load->model()} call
    */
-  static boolean isArgumentOfLoadView(PsiElement element, int argIndex) {
-    return MyPsiUtil.isArgumentOfMethod(element, "load", "view", argIndex);
+  static boolean isArgumentOfLoadModel(PsiElement element, int argIndex) {
+    return MyPsiUtil.isArgumentOfMethod(element, "load", "model", argIndex);
   }
 
 }

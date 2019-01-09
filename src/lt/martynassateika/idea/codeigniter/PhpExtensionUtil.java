@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package lt.martynassateika.idea.codeigniter.view;
+package lt.martynassateika.idea.codeigniter;
 
 import com.intellij.util.PathUtil;
 import com.jetbrains.php.refactoring.PhpNameUtil;
@@ -26,13 +26,13 @@ import org.jetbrains.annotations.NotNull;
  * @author martynas.sateika
  * @since 0.2.0
  */
-class PhpExtensionUtil {
+public class PhpExtensionUtil {
 
   /**
    * @param path a path
    * @return the path with a PHP extension appended, if not present
    */
-  static String addIfMissing(@NotNull String path) {
+  public static String addIfMissing(@NotNull String path) {
     if (PathUtil.getFileExtension(path) == null) {
       return path + ".php";
     } else {
@@ -44,7 +44,7 @@ class PhpExtensionUtil {
    * @param path a path
    * @return the path with the PHP extension removed, if present
    */
-  static String removeIfPresent(@NotNull String path) {
+  public static String removeIfPresent(@NotNull String path) {
     if ("php".equals(PathUtil.getFileExtension(path))) {
       return PhpNameUtil.getNameWithoutExtension(path);
     }
