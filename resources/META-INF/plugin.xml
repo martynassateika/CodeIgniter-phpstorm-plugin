@@ -64,6 +64,10 @@
     <completion.contributor language="PHP"
       implementationClass="lt.martynassateika.idea.codeigniter.contributor.MyCompletionContributor"/>
 
+    <!-- Models -->
+    <psi.referenceContributor language="PHP"
+      implementation="lt.martynassateika.idea.codeigniter.model.ModelReferenceContributor"/>
+
     <!-- Views -->
     <psi.referenceContributor
       implementation="lt.martynassateika.idea.codeigniter.view.ViewReferenceContributor"/>

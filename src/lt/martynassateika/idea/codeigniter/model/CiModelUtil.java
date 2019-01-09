@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import lt.martynassateika.idea.codeigniter.PhpExtensionUtil;
 import lt.martynassateika.idea.codeigniter.psi.MyPsiUtil;
 
 /**
@@ -50,7 +51,7 @@ public class CiModelUtil {
     PsiManager psiManager = PsiManager.getInstance(project);
 
     // If no extension is specified, it's a PHP file
-    // relativePath = PhpExtensionUtil.addIfMissing(relativePath);
+    relativePath = PhpExtensionUtil.addIfMissing(relativePath);
 
     List<PsiFile> modelFiles = new ArrayList<>();
     for (PsiFileSystemItem fileSystemItem : getModelDirectories(project)) {
