@@ -19,6 +19,7 @@ package lt.martynassateika.idea.codeigniter.psi;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
+import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
@@ -67,25 +68,25 @@ public class MyPsiReference implements PsiReference {
   }
 
   @Override
-  public PsiElement handleElementRename(String s) throws IncorrectOperationException {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public PsiElement bindToElement(@NotNull PsiElement psiElement)
+  public PsiElement handleElementRename(@NotNull String newElementName)
       throws IncorrectOperationException {
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public boolean isReferenceTo(PsiElement psiElement) {
-    return resolve() == psiElement;
+  public PsiElement bindToElement(@NotNull PsiElement element) throws IncorrectOperationException {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public boolean isReferenceTo(@NotNull PsiElement element) {
+    return resolve() == element;
   }
 
   @NotNull
   @Override
   public Object[] getVariants() {
-    return new Object[0];
+    return ArrayUtil.EMPTY_OBJECT_ARRAY;
   }
 
   @Override
