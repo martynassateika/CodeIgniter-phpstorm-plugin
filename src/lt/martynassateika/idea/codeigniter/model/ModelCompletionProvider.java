@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package lt.martynassateika.idea.codeigniter.view;
+package lt.martynassateika.idea.codeigniter.model;
 
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
@@ -30,6 +30,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileSystemItem;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.util.ProcessingContext;
+import com.jetbrains.php.lang.PhpFileType;
 import com.jetbrains.php.lang.PhpLanguage;
 import com.jetbrains.php.lang.psi.elements.FunctionReference;
 import com.jetbrains.php.lang.psi.elements.ParameterList;
@@ -43,12 +44,12 @@ import lt.martynassateika.idea.codeigniter.psi.MyPsiUtil;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Provides relative paths for 'view()' calls.
+ * Provides relative paths for 'model()' calls.
  *
  * @author martynas.sateika
- * @since 0.2.0
+ * @since 0.4.0
  */
-public class ViewCompletionProvider extends CompletionProvider<CompletionParameters> {
+public class ModelCompletionProvider extends CompletionProvider<CompletionParameters> {
 
   @Override
   protected void addCompletions(@NotNull CompletionParameters completionParameters,
@@ -57,16 +58,16 @@ public class ViewCompletionProvider extends CompletionProvider<CompletionParamet
     if (originalPosition != null) {
       Project project = originalPosition.getProject();
       if (CodeIgniterProjectComponent.isEnabled(project)) {
-        if (isViewNameElement(originalPosition)) {
-          List<PsiFileSystemItem> viewDirectories = CiViewUtil.getViewDirectories(project);
-          for (PsiFileSystemItem viewDirectory : viewDirectories) {
-            VirtualFile directoryVirtualFile = viewDirectory.getVirtualFile();
+        if (isModelNameElement(originalPosition)) {
+          List<PsiFileSystemItem> modelDirectories = CiModelUtil.getModelDirectories(project);
+          for (PsiFileSystemItem modelDirectory : modelDirectories) {
+            VirtualFile directoryVirtualFile = modelDirectory.getVirtualFile();
             VirtualFile applicationDirectory = directoryVirtualFile.getParent();
             VfsUtil
                 .visitChildrenRecursively(directoryVirtualFile, new VirtualFileVisitor<Object>() {
                   @Override
                   public boolean visitFile(@NotNull VirtualFile file) {
-                    if (!file.isDirectory()) {
+                    if (file.getFileType() == PhpFileType.INSTANCE) {
                       String relativePath = VfsUtil
                           .findRelativePath(directoryVirtualFile, file, '/');
                       if (StringUtil.isNotEmpty(relativePath)) {
@@ -89,20 +90,20 @@ public class ViewCompletionProvider extends CompletionProvider<CompletionParamet
 
   /**
    * @param element a PSI element
-   * @return true if the element is in the first argument position within a call to 'load->view()'
+   * @return true if the element is in the first argument position within a call to 'load->model()'
    */
-  private static boolean isViewNameElement(PsiElement element) {
+  private static boolean isModelNameElement(PsiElement element) {
     StringLiteralExpression literalExpression = MyPsiUtil
         .getParentOfType(element, StringLiteralExpression.class);
     if (literalExpression != null) {
-      return CiViewUtil.isArgumentOfLoadView(literalExpression, 0);
+      return CiModelUtil.isArgumentOfLoadModel(literalExpression, 0);
     }
     return false;
   }
 
   @NotNull
   public static PsiElementPattern.Capture<LeafPsiElement> getPlace() {
-    // view('foo');
+    // model('foo');
     return PlatformPatterns
         .psiElement(LeafPsiElement.class)
         .withParent(StringLiteralExpression.class)

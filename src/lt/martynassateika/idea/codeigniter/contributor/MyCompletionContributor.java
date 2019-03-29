@@ -20,6 +20,7 @@ import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionType;
 import lt.martynassateika.idea.codeigniter.helper.HelperCompletionProvider;
 import lt.martynassateika.idea.codeigniter.language.LanguageCompletionProvider;
+import lt.martynassateika.idea.codeigniter.model.ModelCompletionProvider;
 import lt.martynassateika.idea.codeigniter.view.ViewCompletionProvider;
 
 /**
@@ -33,6 +34,7 @@ public class MyCompletionContributor extends CompletionContributor {
         new HelperCompletionProvider());
     extend(CompletionType.BASIC, LanguageCompletionProvider.getPlace(),
         new LanguageCompletionProvider());
+    extend(CompletionType.BASIC, ModelCompletionProvider.getPlace(), new ModelCompletionProvider());
     extend(CompletionType.BASIC, ViewCompletionProvider.getPlace(), new ViewCompletionProvider());
   }
 

@@ -126,7 +126,7 @@ class CiHelperUtil {
   /**
    * @param element an element
    * @param argIndex method parameter index (0-based)
-   * @return {@code true} if {@code element} is an argument of a {@code load->view()} call
+   * @return {@code true} if {@code element} is an argument of a {@code load->helper()} call
    */
   private static boolean isArgumentOfLoadHelper(PsiElement element, int argIndex) {
     return MyPsiUtil.isArgumentOfMethod(element, "load", "helper", argIndex);
