@@ -30,6 +30,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileSystemItem;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.util.ProcessingContext;
+import com.jetbrains.php.lang.PhpFileType;
 import com.jetbrains.php.lang.PhpLanguage;
 import com.jetbrains.php.lang.psi.elements.FunctionReference;
 import com.jetbrains.php.lang.psi.elements.ParameterList;
@@ -66,7 +67,7 @@ public class ModelCompletionProvider extends CompletionProvider<CompletionParame
                 .visitChildrenRecursively(directoryVirtualFile, new VirtualFileVisitor<Object>() {
                   @Override
                   public boolean visitFile(@NotNull VirtualFile file) {
-                    if (!file.isDirectory()) {
+                    if (file.getFileType() == PhpFileType.INSTANCE) {
                       String relativePath = VfsUtil
                           .findRelativePath(directoryVirtualFile, file, '/');
                       if (StringUtil.isNotEmpty(relativePath)) {
