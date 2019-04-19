@@ -17,9 +17,9 @@
 package lt.martynassateika.idea.codeigniter;
 
 import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.util.xmlb.XmlSerializerUtil;
+import lt.martynassateika.idea.codeigniter.compat.MyAbstractProjectComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,8 +30,8 @@ import org.jetbrains.annotations.Nullable;
  * @since 0.1.0
  */
 @State(name = "CodeIgniterProjectSettings")
-public class CodeIgniterProjectSettings implements ProjectComponent,
-    PersistentStateComponent<CodeIgniterProjectSettings> {
+public class CodeIgniterProjectSettings extends MyAbstractProjectComponent
+    implements PersistentStateComponent<CodeIgniterProjectSettings> {
 
   @SuppressWarnings("WeakerAccess")
   public boolean isEnabled;

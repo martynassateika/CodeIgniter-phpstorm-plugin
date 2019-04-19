@@ -35,6 +35,7 @@ import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import java.util.List;
 import javax.swing.Icon;
 import lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent;
+import lt.martynassateika.idea.codeigniter.compat.VfsUtilCompat;
 import lt.martynassateika.idea.codeigniter.contributor.BasicFileLookupElement;
 import lt.martynassateika.idea.codeigniter.psi.MyPsiUtil;
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +63,7 @@ public class HelperCompletionProvider extends CompletionProvider<CompletionParam
               @Override
               public boolean visitFile(@NotNull VirtualFile file) {
                 if (CiHelperUtil.isHelperFile(file)) {
-                  String relativePath = VfsUtil
+                  String relativePath = VfsUtilCompat
                       .findRelativePath(directoryVirtualFile, file, '/');
                   if (relativePath != null) {
                     String formattedRelativePath = CiHelperUtil

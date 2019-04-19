@@ -38,6 +38,7 @@ import java.util.List;
 import javax.swing.Icon;
 import lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent;
 import lt.martynassateika.idea.codeigniter.PhpExtensionUtil;
+import lt.martynassateika.idea.codeigniter.compat.VfsUtilCompat;
 import lt.martynassateika.idea.codeigniter.contributor.BasicFileLookupElement;
 import lt.martynassateika.idea.codeigniter.psi.MyPsiUtil;
 import org.jetbrains.annotations.NotNull;
@@ -67,7 +68,7 @@ public class ViewCompletionProvider extends CompletionProvider<CompletionParamet
                   @Override
                   public boolean visitFile(@NotNull VirtualFile file) {
                     if (!file.isDirectory()) {
-                      String relativePath = VfsUtil
+                      String relativePath = VfsUtilCompat
                           .findRelativePath(directoryVirtualFile, file, '/');
                       if (StringUtil.isNotEmpty(relativePath)) {
                         Icon icon = file.getFileType().getIcon();
