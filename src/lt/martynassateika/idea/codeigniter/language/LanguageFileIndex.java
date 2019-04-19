@@ -28,7 +28,6 @@ import com.intellij.util.indexing.ID;
 import com.intellij.util.io.DataExternalizer;
 import com.intellij.util.io.EnumeratorStringDescriptor;
 import com.intellij.util.io.KeyDescriptor;
-import com.intellij.util.io.VoidDataExternalizer;
 import com.jetbrains.php.lang.PhpFileType;
 import com.jetbrains.php.lang.psi.PhpFile;
 import com.jetbrains.php.lang.psi.elements.ArrayAccessExpression;
@@ -37,6 +36,8 @@ import com.jetbrains.php.lang.psi.visitors.PhpRecursiveElementVisitor;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import lt.martynassateika.idea.codeigniter.compat.VoidDataExternalizer;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 

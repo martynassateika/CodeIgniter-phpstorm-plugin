@@ -88,6 +88,12 @@ public class CodeIgniterSettingsConfigurable implements SearchableConfigurable {
     return getHelpTopic();
   }
 
+  @Nullable
+  @Override
+  public Runnable enableSearch(String s) {
+    return null; // default method overridden for 2016.1 support
+  }
+
   public static class CodeIgniterConfigurablePanel {
 
     private JPanel myWholePanel;

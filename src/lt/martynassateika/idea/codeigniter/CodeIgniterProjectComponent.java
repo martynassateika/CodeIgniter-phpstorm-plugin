@@ -16,15 +16,15 @@
 
 package lt.martynassateika.idea.codeigniter;
 
-import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
+import lt.martynassateika.idea.codeigniter.compat.MyAbstractProjectComponent;
 
 /**
  * @author martynas.sateika
  * @since 0.1.0
  */
-public class CodeIgniterProjectComponent implements ProjectComponent {
+public class CodeIgniterProjectComponent extends MyAbstractProjectComponent {
 
   public static boolean isEnabled(Project project) {
     CodeIgniterProjectSettings settings = ServiceManager
