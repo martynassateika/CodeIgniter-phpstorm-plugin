@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>lt.martynassateika.idea.codeigniter</id>
   <name>CodeIgniter</name>
-  <version>0.4.0</version>
+  <version>0.4.1</version>
   <vendor url="http://www.martynassateika.lt">Martynas Sateika</vendor>
 
   <description><![CDATA[
@@ -9,6 +9,11 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      0.4.1 (2019-04-20):
+      <ul>
+          <li>Fixed several compatibility issues with PhpStorm 2016.*, 2017.*</li>
+      </ul>
+
       0.4.0 (2019-03-29):
       <ul>
           <li>Completion provider for model files</li>
