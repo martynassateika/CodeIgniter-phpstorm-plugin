@@ -6,7 +6,7 @@ CodeIgniter Plugin for PhpStorm
 
 Installation
 ---------------------
-* Install the plugin by going to `Settings -> Plugins -> Browse repositories` and searching for "CodeIgniter Plugin".
+* Install the plugin by going to `Settings -> Plugins -> Browse repositories` and searching for "CodeIgniter".
 * Enable it in your project by going to `File -> Settings -> Languages & Frameworks -> PHP -> CodeIgniter`.
 
 Attributions
