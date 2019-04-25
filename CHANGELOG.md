@@ -1,5 +1,10 @@
 Changelog
 =========
+## [0.5.0] - 2019-04-25
+### Added
+- Completion provider for config item names
+- Reference contributor for config item names
+
 ## [0.4.1] - 2019-04-20
 ### Fixed
 - Several compatibility issues with PhpStorm 2016.\*, 2017.\*
@@ -33,6 +38,7 @@ Changelog
 - Reference contributor for translations
 - Folding builder for translations
 
+[0.5.0]: https://github.com/martynassateika/CodeIgniter-phpstorm-plugin/compare/0.4.1...0.5.0
 [0.4.1]: https://github.com/martynassateika/CodeIgniter-phpstorm-plugin/compare/0.4.0...0.4.1
 [0.4.0]: https://github.com/martynassateika/CodeIgniter-phpstorm-plugin/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/martynassateika/CodeIgniter-phpstorm-plugin/compare/0.2.1...0.3.0
