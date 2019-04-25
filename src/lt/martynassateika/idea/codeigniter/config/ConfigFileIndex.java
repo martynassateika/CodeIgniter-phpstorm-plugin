@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Martynas Sateika
+ * Copyright 2019 Martynas Sateika
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package lt.martynassateika.idea.codeigniter.language;
+package lt.martynassateika.idea.codeigniter.config;
 
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.util.indexing.DataIndexer;
@@ -32,6 +33,7 @@ import com.jetbrains.php.lang.PhpFileType;
 import com.jetbrains.php.lang.psi.PhpFile;
 import com.jetbrains.php.lang.psi.elements.ArrayAccessExpression;
 import com.jetbrains.php.lang.psi.elements.ArrayIndex;
+import com.jetbrains.php.lang.psi.elements.Variable;
 import com.jetbrains.php.lang.psi.visitors.PhpRecursiveElementVisitor;
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,15 +43,15 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Index for CI translations.
+ * Index for CI configuration items.
  *
  * @author martynas.sateika
- * @since 0.1.0
+ * @since 0.5.0
  */
-public class LanguageFileIndex extends FileBasedIndexExtension<String, Void> {
+public class ConfigFileIndex extends FileBasedIndexExtension<String, Void> {
 
   @NonNls
-  static final ID<String, Void> KEY = ID.create("codeigniter.language.file.index");
+  static final ID<String, Void> KEY = ID.create("codeigniter.config.file.index");
 
   private final MyDataIndexer myDataIndexer = new MyDataIndexer();
 
@@ -103,14 +105,20 @@ public class LanguageFileIndex extends FileBasedIndexExtension<String, Void> {
       PsiManager psiManager = PsiManager.getInstance(fileContent.getProject());
       PsiFile psiFile = psiManager.findFile(file);
       if (psiFile instanceof PhpFile) {
-        if (CiLanguageUtil.isLanguageFile((PhpFile) psiFile)) {
+        if (CiConfigUtil.isConfigFile((PhpFile) psiFile)) {
           Map<String, Void> map = new HashMap<>();
           psiFile.accept(new PhpRecursiveElementVisitor() {
             @Override
             public void visitPhpArrayAccessExpression(ArrayAccessExpression expression) {
-              ArrayIndex index = expression.getIndex();
-              if (index != null) {
-                map.put(index.getText(), null);
+              PsiElement firstChild = expression.getFirstChild();
+              if (firstChild instanceof Variable) {
+                Variable variable = (Variable) firstChild;
+                if (variable.getName().equals("config")) {
+                  ArrayIndex index = expression.getIndex();
+                  if (index != null) {
+                    map.put(index.getText(), null);
+                  }
+                }
               }
             }
           });

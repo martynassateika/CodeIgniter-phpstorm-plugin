@@ -62,6 +62,12 @@
     <inspectionToolProvider
       implementation="lt.martynassateika.idea.codeigniter.inspection.CiInspectionToolProvider"/>
 
+    <!-- Configuration -->
+    <fileBasedIndex
+      implementation="lt.martynassateika.idea.codeigniter.config.ConfigFileIndex"/>
+    <psi.referenceContributor language="PHP"
+      implementation="lt.martynassateika.idea.codeigniter.config.ConfigReferenceContributor"/>
+
     <!-- Helpers -->
     <psi.referenceContributor
       implementation="lt.martynassateika.idea.codeigniter.helper.HelperReferenceContributor"/>
