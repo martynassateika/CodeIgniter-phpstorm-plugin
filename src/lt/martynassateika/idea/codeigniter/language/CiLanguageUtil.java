@@ -17,6 +17,7 @@
 package lt.martynassateika.idea.codeigniter.language;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -27,10 +28,12 @@ import com.jetbrains.php.lang.psi.elements.ArrayAccessExpression;
 import com.jetbrains.php.lang.psi.elements.ArrayIndex;
 import com.jetbrains.php.lang.psi.elements.AssignmentExpression;
 import com.jetbrains.php.lang.psi.elements.PhpPsiElement;
+import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpRecursiveElementVisitor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import lt.martynassateika.idea.codeigniter.psi.MyPsiUtil;
 
 /**
  * Utility methods related to the CI Language class.
@@ -54,18 +57,39 @@ class CiLanguageUtil {
   }
 
   /**
+   * Returns {@code true} if the supplied element represents a language line key.
+   *
+   * @param element an element
+   * @return {@code true} if the supplied element represents a language line key
+   */
+  static boolean isLanguageLineKeyElement(PsiElement element) {
+    return MyPsiUtil.isArgumentOfFunction(element, "lang", 0);
+  }
+
+  /**
+   * @param project current project
+   * @param literalExpression containing the language key
+   * @return assignment expressions matching the language key across all language files
+   */
+  static List<AssignmentExpression> findTranslationsFor(
+      Project project,
+      StringLiteralExpression literalExpression) {
+    return findTranslationsFor(project, literalExpression.getContents());
+  }
+
+  /**
    * @param project current project
    * @param text language key
    * @return assignment expressions matching the language key across all language files
    */
-  @SuppressWarnings("deprecation")
-  static List<AssignmentExpression> findTranslationsFor(Project project, String text) {
+  private static List<AssignmentExpression> findTranslationsFor(Project project, String text) {
     List<AssignmentExpression> expressions = new ArrayList<>();
     FileBasedIndex.getInstance().getFilesWithKey(LanguageFileIndex.KEY,
         Collections.singleton(text), file -> {
           PsiManager psiManager = PsiManager.getInstance(project);
           PsiFile psiFile = psiManager.findFile(file);
           if (psiFile instanceof PhpFile) {
+            //noinspection deprecation
             psiFile.accept(new PhpRecursiveElementVisitor() {
               @Override
               public void visitPhpAssignmentExpression(AssignmentExpression assignmentExpression) {
@@ -73,8 +97,9 @@ class CiLanguageUtil {
                 if (variable instanceof ArrayAccessExpression) {
                   ArrayAccessExpression arrayAccessExpression = (ArrayAccessExpression) variable;
                   ArrayIndex index = arrayAccessExpression.getIndex();
-                  if (index != null) {
-                    if (index.getText().equals(text)) {
+                  if (index != null && index.getValue() instanceof StringLiteralExpression) {
+                    StringLiteralExpression indexValue = (StringLiteralExpression) index.getValue();
+                    if (indexValue.getContents().equals(text)) {
                       expressions.add(assignmentExpression);
                     }
                   }

@@ -55,8 +55,10 @@ public class LanguageReferenceContributor extends PsiReferenceContributor {
               if (psiElement instanceof StringLiteralExpression) {
                 StringLiteralExpression stringLiteralExpression = (StringLiteralExpression) psiElement;
                 if (CiLanguageUtil.isLanguageLineKeyElement(stringLiteralExpression)) {
-                  List<AssignmentExpression> translations = CiLanguageUtil
-                      .findTranslationsFor(project, psiElement.getText());
+                  List<AssignmentExpression> translations = CiLanguageUtil.findTranslationsFor(
+                      project,
+                      stringLiteralExpression
+                  );
                   List<PsiReference> references = new ArrayList<>(translations.size());
                   for (AssignmentExpression translation : translations) {
                     ArrayAccessExpression arrayAccessExpression = (ArrayAccessExpression) translation

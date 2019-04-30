@@ -61,7 +61,7 @@ public class LanguageFoldingBuilder extends FoldingBuilderEx {
         if (parameters.length > 0) {
           PsiElement firstParameter = parameters[0];
           if (firstParameter instanceof StringLiteralExpression) {
-            String translation = getTranslation(project, firstParameter.getText());
+            String translation = getTranslation(project, (StringLiteralExpression) firstParameter);
             if (translation != null) {
               FoldingDescriptor foldingDescriptor = createDescriptor(firstParameter, translation);
               descriptors.add(foldingDescriptor);
@@ -90,12 +90,12 @@ public class LanguageFoldingBuilder extends FoldingBuilderEx {
 
   /**
    * @param project current project
-   * @param text language key
+   * @param expression language key
    * @return translation if found, else null
    */
   @Nullable
-  private static String getTranslation(Project project, String text) {
-    List<AssignmentExpression> translations = CiLanguageUtil.findTranslationsFor(project, text);
+  private static String getTranslation(Project project, StringLiteralExpression expression) {
+    List<AssignmentExpression> translations = CiLanguageUtil.findTranslationsFor(project, expression);
     if (translations.isEmpty()) {
       return null;
     }
