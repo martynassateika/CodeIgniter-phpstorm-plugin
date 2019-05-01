@@ -42,6 +42,20 @@ public class MyPsiReference implements PsiReference {
     this.literalExpression = literalExpression;
   }
 
+  /**
+   * @param psiElement a PSI element
+   * @return true if the element contains at least one reference of this type
+   */
+  public static boolean referencesElement(PsiElement psiElement) {
+    PsiReference[] references = psiElement.getReferences();
+    for (PsiReference reference : references) {
+      if (reference instanceof MyPsiReference) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @NotNull
   @Override
   public PsiElement getElement() {

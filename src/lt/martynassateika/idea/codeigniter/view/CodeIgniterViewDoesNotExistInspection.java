@@ -19,7 +19,6 @@ package lt.martynassateika.idea.codeigniter.view;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiReference;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
 import lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent;
@@ -50,24 +49,14 @@ public class CodeIgniterViewDoesNotExistInspection extends CodeIgniterInspection
         Project project = expression.getProject();
         if (CodeIgniterProjectComponent.isEnabled(project)) {
           if (CiViewUtil.isArgumentOfLoadView(expression, 0)) {
-            if (!hasViewReference(expression)) {
+            // TODO Reference check enough?
+            if (!MyPsiReference.referencesElement(expression)) {
               problemsHolder.registerProblem(expression, "View does not exist");
             }
           }
         }
       }
     };
-  }
-
-  // TODO Reference check enough? Do we need to re-do everything in the reference contributor?
-  private static boolean hasViewReference(StringLiteralExpression expression) {
-    PsiReference[] references = expression.getReferences();
-    for (PsiReference reference : references) {
-      if (reference instanceof MyPsiReference) {
-        return true;
-      }
-    }
-    return false;
   }
 
 }

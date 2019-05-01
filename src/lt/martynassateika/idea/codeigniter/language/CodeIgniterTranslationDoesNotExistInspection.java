@@ -50,7 +50,8 @@ public class CodeIgniterTranslationDoesNotExistInspection extends CodeIgniterIns
         Project project = expression.getProject();
         if (CodeIgniterProjectComponent.isEnabled(project)) {
           if (CiLanguageUtil.isLanguageLineKeyElement(expression)) {
-            if (!hasViewReference(expression)) {
+            // TODO Reference check enough?
+            if (!MyPsiReference.referencesElement(expression)) {
               problemsHolder.registerProblem(expression, String.format(
                   "Translation for '%s' does not exist",
                   expression.getContents()
@@ -60,17 +61,6 @@ public class CodeIgniterTranslationDoesNotExistInspection extends CodeIgniterIns
         }
       }
     };
-  }
-
-  // TODO Reference check enough? Do we need to re-do everything in the reference contributor?
-  private static boolean hasViewReference(StringLiteralExpression expression) {
-    PsiReference[] references = expression.getReferences();
-    for (PsiReference reference : references) {
-      if (reference instanceof MyPsiReference) {
-        return true;
-      }
-    }
-    return false;
   }
 
 }
