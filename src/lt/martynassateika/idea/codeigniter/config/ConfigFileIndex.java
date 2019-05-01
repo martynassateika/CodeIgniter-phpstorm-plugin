@@ -33,6 +33,8 @@ import com.jetbrains.php.lang.PhpFileType;
 import com.jetbrains.php.lang.psi.PhpFile;
 import com.jetbrains.php.lang.psi.elements.ArrayAccessExpression;
 import com.jetbrains.php.lang.psi.elements.ArrayIndex;
+import com.jetbrains.php.lang.psi.elements.PhpPsiElement;
+import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.elements.Variable;
 import com.jetbrains.php.lang.psi.visitors.PhpRecursiveElementVisitor;
 import java.util.Collections;
@@ -81,7 +83,7 @@ public class ConfigFileIndex extends FileBasedIndexExtension<String, Void> {
 
   @Override
   public int getVersion() {
-    return 0;
+    return 1;
   }
 
   @NotNull
@@ -110,13 +112,13 @@ public class ConfigFileIndex extends FileBasedIndexExtension<String, Void> {
           psiFile.accept(new PhpRecursiveElementVisitor() {
             @Override
             public void visitPhpArrayAccessExpression(ArrayAccessExpression expression) {
-              PsiElement firstChild = expression.getFirstChild();
-              if (firstChild instanceof Variable) {
-                Variable variable = (Variable) firstChild;
-                if (variable.getName().equals("config")) {
-                  ArrayIndex index = expression.getIndex();
-                  if (index != null) {
-                    map.put(index.getText(), null);
+              if (isConfigArrayAccess(expression)) {
+                ArrayIndex index = expression.getIndex();
+                if (index != null) {
+                  PhpPsiElement value = index.getValue();
+                  if (value instanceof StringLiteralExpression) {
+                    String text = ((StringLiteralExpression) value).getContents();
+                    map.put(text, null);
                   }
                 }
               }
@@ -127,6 +129,19 @@ public class ConfigFileIndex extends FileBasedIndexExtension<String, Void> {
       }
       return Collections.emptyMap();
     }
+  }
+
+  /**
+   * @param expression array access expression
+   * @return {@code true} if the array is called 'config'
+   */
+  private boolean isConfigArrayAccess(ArrayAccessExpression expression) {
+    PsiElement firstChild = expression.getFirstChild();
+    if (firstChild instanceof Variable) {
+      Variable variable = (Variable) firstChild;
+      return variable.getName().equals("config");
+    }
+    return false;
   }
 
 }

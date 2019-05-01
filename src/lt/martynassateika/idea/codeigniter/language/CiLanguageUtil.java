@@ -24,10 +24,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.FileBasedIndex;
 import com.jetbrains.php.lang.PhpFileType;
 import com.jetbrains.php.lang.psi.PhpFile;
-import com.jetbrains.php.lang.psi.elements.ArrayAccessExpression;
-import com.jetbrains.php.lang.psi.elements.ArrayIndex;
 import com.jetbrains.php.lang.psi.elements.AssignmentExpression;
-import com.jetbrains.php.lang.psi.elements.PhpPsiElement;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpRecursiveElementVisitor;
 import java.util.ArrayList;
@@ -93,16 +90,8 @@ class CiLanguageUtil {
             psiFile.accept(new PhpRecursiveElementVisitor() {
               @Override
               public void visitPhpAssignmentExpression(AssignmentExpression assignmentExpression) {
-                PhpPsiElement variable = assignmentExpression.getVariable();
-                if (variable instanceof ArrayAccessExpression) {
-                  ArrayAccessExpression arrayAccessExpression = (ArrayAccessExpression) variable;
-                  ArrayIndex index = arrayAccessExpression.getIndex();
-                  if (index != null && index.getValue() instanceof StringLiteralExpression) {
-                    StringLiteralExpression indexValue = (StringLiteralExpression) index.getValue();
-                    if (indexValue.getContents().equals(text)) {
-                      expressions.add(assignmentExpression);
-                    }
-                  }
+                if (MyPsiUtil.isArrayAccessWithStringIndex(assignmentExpression, text)) {
+                  expressions.add(assignmentExpression);
                 }
               }
             });

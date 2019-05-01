@@ -56,7 +56,7 @@ public class ConfigReferenceContributor extends PsiReferenceContributor {
                 StringLiteralExpression literalExpression = (StringLiteralExpression) psiElement;
                 if (CiConfigUtil.isConfigItemNameElement(psiElement)) {
                   List<AssignmentExpression> configValues = CiConfigUtil
-                      .findValuesFor(project, psiElement.getText());
+                      .findValuesFor(project, literalExpression);
                   return getValueReferences(literalExpression, configValues);
                 }
               }
