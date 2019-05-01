@@ -46,7 +46,6 @@ public class LanguageReferenceContributor extends PsiReferenceContributor {
   public void registerReferenceProviders(@NotNull PsiReferenceRegistrar psiReferenceRegistrar) {
     psiReferenceRegistrar.registerReferenceProvider(PlatformPatterns.psiElement(),
         new PsiReferenceProvider() {
-          @SuppressWarnings("deprecation")
           @NotNull
           @Override
           public PsiReference[] getReferencesByElement(@NotNull PsiElement psiElement,
@@ -55,18 +54,22 @@ public class LanguageReferenceContributor extends PsiReferenceContributor {
             if (CodeIgniterProjectComponent.isEnabled(project)) {
               if (psiElement instanceof StringLiteralExpression) {
                 StringLiteralExpression stringLiteralExpression = (StringLiteralExpression) psiElement;
-                List<AssignmentExpression> translations = CiLanguageUtil
-                    .findTranslationsFor(project, psiElement.getText());
-                List<PsiReference> references = new ArrayList<>(translations.size());
-                for (AssignmentExpression translation : translations) {
-                  ArrayAccessExpression arrayAccessExpression = (ArrayAccessExpression) translation
-                      .getVariable();
-                  if (arrayAccessExpression != null) {
-                    ArrayIndex index = arrayAccessExpression.getIndex();
-                    references.add(new MyPsiReference(index, stringLiteralExpression));
+                if (CiLanguageUtil.isLanguageLineKeyElement(stringLiteralExpression)) {
+                  List<AssignmentExpression> translations = CiLanguageUtil.findTranslationsFor(
+                      project,
+                      stringLiteralExpression
+                  );
+                  List<PsiReference> references = new ArrayList<>(translations.size());
+                  for (AssignmentExpression translation : translations) {
+                    ArrayAccessExpression arrayAccessExpression = (ArrayAccessExpression) translation
+                        .getVariable();
+                    if (arrayAccessExpression != null) {
+                      ArrayIndex index = arrayAccessExpression.getIndex();
+                      references.add(new MyPsiReference(index, stringLiteralExpression));
+                    }
                   }
+                  return references.toArray(PsiReference.EMPTY_ARRAY);
                 }
-                return references.toArray(PsiReference.EMPTY_ARRAY);
               }
             }
             return PsiReference.EMPTY_ARRAY;

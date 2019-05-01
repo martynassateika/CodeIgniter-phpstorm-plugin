@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package lt.martynassateika.idea.codeigniter.view;
+package lt.martynassateika.idea.codeigniter.language;
 
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.PsiReference;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
 import lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent;
@@ -29,15 +30,15 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @author martynas.sateika
- * @since 0.2.0
+ * @since 0.5.1
  */
-public class CodeIgniterViewDoesNotExistInspection extends CodeIgniterInspection {
+public class CodeIgniterTranslationDoesNotExistInspection extends CodeIgniterInspection {
 
   @Nls
   @NotNull
   @Override
   public String getDisplayName() {
-    return "View does not exist";
+    return "Translation does not exist";
   }
 
   @NotNull
@@ -48,10 +49,13 @@ public class CodeIgniterViewDoesNotExistInspection extends CodeIgniterInspection
       public void visitPhpStringLiteralExpression(StringLiteralExpression expression) {
         Project project = expression.getProject();
         if (CodeIgniterProjectComponent.isEnabled(project)) {
-          if (CiViewUtil.isArgumentOfLoadView(expression, 0)) {
+          if (CiLanguageUtil.isLanguageLineKeyElement(expression)) {
             // TODO Reference check enough?
             if (!MyPsiReference.referencesElement(expression)) {
-              problemsHolder.registerProblem(expression, "View does not exist");
+              problemsHolder.registerProblem(expression, String.format(
+                  "Translation for '%s' does not exist",
+                  expression.getContents()
+              ));
             }
           }
         }

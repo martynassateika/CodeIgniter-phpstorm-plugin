@@ -61,15 +61,11 @@ public class LanguageFoldingBuilder extends FoldingBuilderEx {
         if (parameters.length > 0) {
           PsiElement firstParameter = parameters[0];
           if (firstParameter instanceof StringLiteralExpression) {
-            descriptors.add(
-                new FoldingDescriptor(firstParameter.getNode(), firstParameter.getTextRange()) {
-                  @Nullable
-                  @Override
-                  public String getPlaceholderText() {
-                    return getTranslation(project, firstParameter.getText());
-                  }
-                }
-            );
+            String translation = getTranslation(project, (StringLiteralExpression) firstParameter);
+            if (translation != null) {
+              FoldingDescriptor foldingDescriptor = createDescriptor(firstParameter, translation);
+              descriptors.add(foldingDescriptor);
+            }
           }
         }
       }
@@ -78,12 +74,28 @@ public class LanguageFoldingBuilder extends FoldingBuilderEx {
   }
 
   /**
-   * @param project current project
-   * @param text language key
-   * @return translation, if found
+   * Creates a folding descriptor for a PSI element.
+   *
+   * @param element element to fold
+   * @param translation translation to display
    */
-  private static String getTranslation(Project project, String text) {
-    List<AssignmentExpression> translations = CiLanguageUtil.findTranslationsFor(project, text);
+  private static FoldingDescriptor createDescriptor(PsiElement element, String translation) {
+    return new FoldingDescriptor(element.getNode(), element.getTextRange()) {
+      @Override
+      public String getPlaceholderText() {
+        return translation;
+      }
+    };
+  }
+
+  /**
+   * @param project current project
+   * @param expression language key
+   * @return translation if found, else null
+   */
+  @Nullable
+  private static String getTranslation(Project project, StringLiteralExpression expression) {
+    List<AssignmentExpression> translations = CiLanguageUtil.findTranslationsFor(project, expression);
     if (translations.isEmpty()) {
       return null;
     }

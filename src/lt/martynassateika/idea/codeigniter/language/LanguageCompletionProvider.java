@@ -89,7 +89,7 @@ public class LanguageCompletionProvider extends CompletionProvider<CompletionPar
     StringLiteralExpression literalExpression = MyPsiUtil
         .getParentOfType(element, StringLiteralExpression.class);
     if (literalExpression != null) {
-      return MyPsiUtil.isArgumentOfFunction(literalExpression, "lang", 0);
+      return CiLanguageUtil.isLanguageLineKeyElement(literalExpression);
     }
     return false;
   }

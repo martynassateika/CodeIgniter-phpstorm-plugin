@@ -1,5 +1,13 @@
 Changelog
 =========
+## [0.5.1] - 2019-05-01
+### Added
+- Inspection "Translation does not exist"
+### Fixed
+- `lang` parameter folded even if no translation exists
+- Language reference contributor executes on all strings
+- Translation, config item name references work only if quote styles match
+
 ## [0.5.0] - 2019-04-25
 ### Added
 - Completion provider for config item names
@@ -38,6 +46,7 @@ Changelog
 - Reference contributor for translations
 - Folding builder for translations
 
+[0.5.1]: https://github.com/martynassateika/CodeIgniter-phpstorm-plugin/compare/0.5.0...0.5.1
 [0.5.0]: https://github.com/martynassateika/CodeIgniter-phpstorm-plugin/compare/0.4.1...0.5.0
 [0.4.1]: https://github.com/martynassateika/CodeIgniter-phpstorm-plugin/compare/0.4.0...0.4.1
 [0.4.0]: https://github.com/martynassateika/CodeIgniter-phpstorm-plugin/compare/0.3.0...0.4.0

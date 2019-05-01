@@ -17,6 +17,7 @@
 package lt.martynassateika.idea.codeigniter.inspection;
 
 import com.intellij.codeInspection.InspectionToolProvider;
+import lt.martynassateika.idea.codeigniter.language.CodeIgniterTranslationDoesNotExistInspection;
 import lt.martynassateika.idea.codeigniter.view.CodeIgniterReturnedViewNotUsedInspection;
 import lt.martynassateika.idea.codeigniter.view.CodeIgniterSimplifiableViewNameInspection;
 import lt.martynassateika.idea.codeigniter.view.CodeIgniterViewDoesNotExistInspection;
@@ -36,6 +37,7 @@ public class CiInspectionToolProvider implements InspectionToolProvider {
     return new Class[]{
         CodeIgniterReturnedViewNotUsedInspection.class,
         CodeIgniterSimplifiableViewNameInspection.class,
+        CodeIgniterTranslationDoesNotExistInspection.class,
         CodeIgniterViewDoesNotExistInspection.class,
     };
   }

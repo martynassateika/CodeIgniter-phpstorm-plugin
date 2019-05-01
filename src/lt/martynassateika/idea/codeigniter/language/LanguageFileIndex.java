@@ -32,6 +32,8 @@ import com.jetbrains.php.lang.PhpFileType;
 import com.jetbrains.php.lang.psi.PhpFile;
 import com.jetbrains.php.lang.psi.elements.ArrayAccessExpression;
 import com.jetbrains.php.lang.psi.elements.ArrayIndex;
+import com.jetbrains.php.lang.psi.elements.PhpPsiElement;
+import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpRecursiveElementVisitor;
 import java.util.Collections;
 import java.util.HashMap;
@@ -79,7 +81,7 @@ public class LanguageFileIndex extends FileBasedIndexExtension<String, Void> {
 
   @Override
   public int getVersion() {
-    return 0;
+    return 1;
   }
 
   @NotNull
@@ -110,7 +112,11 @@ public class LanguageFileIndex extends FileBasedIndexExtension<String, Void> {
             public void visitPhpArrayAccessExpression(ArrayAccessExpression expression) {
               ArrayIndex index = expression.getIndex();
               if (index != null) {
-                map.put(index.getText(), null);
+                PhpPsiElement value = index.getValue();
+                if (value instanceof StringLiteralExpression) {
+                  String text = ((StringLiteralExpression) value).getContents();
+                  map.put(text, null);
+                }
               }
             }
           });

@@ -24,10 +24,8 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.FileBasedIndex;
 import com.jetbrains.php.lang.PhpFileType;
 import com.jetbrains.php.lang.psi.PhpFile;
-import com.jetbrains.php.lang.psi.elements.ArrayAccessExpression;
-import com.jetbrains.php.lang.psi.elements.ArrayIndex;
 import com.jetbrains.php.lang.psi.elements.AssignmentExpression;
-import com.jetbrains.php.lang.psi.elements.PhpPsiElement;
+import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpRecursiveElementVisitor;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -83,29 +81,33 @@ class CiConfigUtil {
 
   /**
    * @param project current project
+   * @param literalExpression containing the config key
+   * @return assignment expressions matching the config key across all config files
+   */
+  static List<AssignmentExpression> findValuesFor(
+      Project project,
+      StringLiteralExpression literalExpression) {
+    return findValuesFor(project, literalExpression.getContents());
+  }
+
+  /**
+   * @param project current project
    * @param text config key
    * @return assignment expressions matching the config key across all config files
    */
-  @SuppressWarnings("deprecation")
-  static List<AssignmentExpression> findValuesFor(Project project, String text) {
+  private static List<AssignmentExpression> findValuesFor(Project project, String text) {
     List<AssignmentExpression> expressions = new ArrayList<>();
     FileBasedIndex.getInstance().getFilesWithKey(ConfigFileIndex.KEY,
         Collections.singleton(text), file -> {
           PsiManager psiManager = PsiManager.getInstance(project);
           PsiFile psiFile = psiManager.findFile(file);
           if (psiFile instanceof PhpFile) {
+            //noinspection deprecation
             psiFile.accept(new PhpRecursiveElementVisitor() {
               @Override
               public void visitPhpAssignmentExpression(AssignmentExpression assignmentExpression) {
-                PhpPsiElement variable = assignmentExpression.getVariable();
-                if (variable instanceof ArrayAccessExpression) {
-                  ArrayAccessExpression arrayAccessExpression = (ArrayAccessExpression) variable;
-                  ArrayIndex index = arrayAccessExpression.getIndex();
-                  if (index != null) {
-                    if (index.getText().equals(text)) {
-                      expressions.add(assignmentExpression);
-                    }
-                  }
+                if (MyPsiUtil.isArrayAccessWithStringIndex(assignmentExpression, text)) {
+                  expressions.add(assignmentExpression);
                 }
               }
             });

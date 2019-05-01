@@ -17,10 +17,15 @@
 package lt.martynassateika.idea.codeigniter.psi;
 
 import com.intellij.psi.PsiElement;
+import com.jetbrains.php.lang.psi.elements.ArrayAccessExpression;
+import com.jetbrains.php.lang.psi.elements.ArrayIndex;
+import com.jetbrains.php.lang.psi.elements.AssignmentExpression;
 import com.jetbrains.php.lang.psi.elements.FieldReference;
 import com.jetbrains.php.lang.psi.elements.FunctionReference;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.ParameterList;
+import com.jetbrains.php.lang.psi.elements.PhpPsiElement;
+import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -99,6 +104,25 @@ public class MyPsiUtil {
             return fieldName.equals(((FieldReference) firstChild).getName());
           }
         }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * @param expression an assignment expression
+   * @param text expected array index
+   * @return {@code true} if the supplied expression is an array access expression with a string
+   * literal index
+   */
+  public static boolean isArrayAccessWithStringIndex(AssignmentExpression expression, String text) {
+    PhpPsiElement variable = expression.getVariable();
+    if (variable instanceof ArrayAccessExpression) {
+      ArrayAccessExpression arrayAccessExpression = (ArrayAccessExpression) variable;
+      ArrayIndex index = arrayAccessExpression.getIndex();
+      if (index != null && index.getValue() instanceof StringLiteralExpression) {
+        StringLiteralExpression indexValue = (StringLiteralExpression) index.getValue();
+        return indexValue.getContents().equals(text);
       }
     }
     return false;
