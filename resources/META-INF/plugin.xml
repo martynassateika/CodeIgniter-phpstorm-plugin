@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>lt.martynassateika.idea.codeigniter</id>
   <name>CodeIgniter</name>
-  <version>0.5.0</version>
+  <version>0.5.1</version>
   <vendor url="http://www.martynassateika.lt">Martynas Sateika</vendor>
 
   <description><![CDATA[
@@ -9,6 +9,14 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      0.5.1 (2019-05-01):
+      <ul>
+          <li>Added: Inspection "Translation does not exist"</li>
+          <li>Fixed: `lang` parameter folded even if no translation exists</li>
+          <li>Fixed: Language reference contributor executes on all strings</li>
+          <li>Fixed: Translation, config item name references work only if quote styles match</li>
+      </ul>
+
       0.5.0 (2019-04-25):
       <ul>
           <li>Completion provider for config item names</li>

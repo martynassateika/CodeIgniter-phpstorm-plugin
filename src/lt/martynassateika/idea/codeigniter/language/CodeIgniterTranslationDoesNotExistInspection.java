@@ -30,7 +30,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @author martynas.sateika
- * @since 0.6.0
+ * @since 0.5.1
  */
 public class CodeIgniterTranslationDoesNotExistInspection extends CodeIgniterInspection {
 
