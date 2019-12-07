@@ -27,9 +27,7 @@ import lt.martynassateika.idea.codeigniter.compat.MyAbstractProjectComponent;
 public class CodeIgniterProjectComponent extends MyAbstractProjectComponent {
 
   public static boolean isEnabled(Project project) {
-    CodeIgniterProjectSettings settings = ServiceManager
-        .getService(project, CodeIgniterProjectSettings.class);
-    return settings.isEnabled();
+    return project.getComponent(CodeIgniterProjectSettings.class).isEnabled();
   }
 
 }
