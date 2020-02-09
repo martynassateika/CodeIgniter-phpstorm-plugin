@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>lt.martynassateika.idea.codeigniter</id>
   <name>CodeIgniter</name>
-  <version>0.5.1</version>
+  <version>0.5.2</version>
   <vendor url="http://www.martynassateika.lt">Martynas Sateika</vendor>
 
   <description><![CDATA[
@@ -9,6 +9,11 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      0.5.2 (2020-02-09):
+      <ul>
+          <li>Fixed: Compatibility issues with PhpStorm 2019.3 (thanks @ivothgle!)</li>
+      </ul>
+
       0.5.1 (2019-05-01):
       <ul>
           <li>Added: Inspection "Translation does not exist"</li>

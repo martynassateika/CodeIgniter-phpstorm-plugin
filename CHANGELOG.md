@@ -1,5 +1,9 @@
 Changelog
 =========
+## [0.5.2] - 2020-02-09
+### Fixed
+- Compatibility issues with PhpStorm 2019.3 (thanks @ivothgle!)
+
 ## [0.5.1] - 2019-05-01
 ### Added
 - Inspection "Translation does not exist"
@@ -46,6 +50,7 @@ Changelog
 - Reference contributor for translations
 - Folding builder for translations
 
+[0.5.2]: https://github.com/martynassateika/CodeIgniter-phpstorm-plugin/compare/0.5.1...0.5.2
 [0.5.1]: https://github.com/martynassateika/CodeIgniter-phpstorm-plugin/compare/0.5.0...0.5.1
 [0.5.0]: https://github.com/martynassateika/CodeIgniter-phpstorm-plugin/compare/0.4.1...0.5.0
 [0.4.1]: https://github.com/martynassateika/CodeIgniter-phpstorm-plugin/compare/0.4.0...0.4.1
