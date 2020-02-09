@@ -16,7 +16,6 @@
 
 package lt.martynassateika.idea.codeigniter;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import lt.martynassateika.idea.codeigniter.compat.MyAbstractProjectComponent;
 
