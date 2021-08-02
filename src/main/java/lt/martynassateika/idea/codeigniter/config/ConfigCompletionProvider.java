@@ -37,7 +37,7 @@ import com.jetbrains.php.lang.PhpLanguage;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import java.util.Collection;
 import java.util.Collections;
-import lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent;
+import lt.martynassateika.idea.codeigniter.CodeIgniterProjectSettings;
 import lt.martynassateika.idea.codeigniter.psi.MyPsiUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -57,7 +57,7 @@ public class ConfigCompletionProvider extends CompletionProvider<CompletionParam
     PsiElement originalPosition = completionParameters.getOriginalPosition();
     if (originalPosition != null) {
       Project project = originalPosition.getProject();
-      if (CodeIgniterProjectComponent.isEnabled(project)) {
+      if (CodeIgniterProjectSettings.getInstance(project).isEnabled()) {
         if (isConfigItemNameElement(originalPosition)) {
           FileBasedIndex index = FileBasedIndex.getInstance();
           Collection<String> allKeys = index.getAllKeys(ConfigFileIndex.KEY, project);

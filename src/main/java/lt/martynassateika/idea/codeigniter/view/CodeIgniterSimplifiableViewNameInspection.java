@@ -27,7 +27,7 @@ import com.jetbrains.php.lang.parser.PhpElementTypes;
 import com.jetbrains.php.lang.psi.PhpPsiElementFactory;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
-import lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent;
+import lt.martynassateika.idea.codeigniter.CodeIgniterProjectSettings;
 import lt.martynassateika.idea.codeigniter.PhpExtensionUtil;
 import lt.martynassateika.idea.codeigniter.inspection.CodeIgniterInspection;
 import org.jetbrains.annotations.Nls;
@@ -54,7 +54,7 @@ public class CodeIgniterSimplifiableViewNameInspection extends CodeIgniterInspec
       @Override
       public void visitPhpStringLiteralExpression(StringLiteralExpression expression) {
         Project project = expression.getProject();
-        if (CodeIgniterProjectComponent.isEnabled(project)) {
+        if (CodeIgniterProjectSettings.getInstance(project).isEnabled()) {
           if (CiViewUtil.isArgumentOfLoadView(expression, 0)) {
             String relativePath = StringUtil.unquoteString(expression.getText());
             String withoutExtension = PhpExtensionUtil.removeIfPresent(relativePath);

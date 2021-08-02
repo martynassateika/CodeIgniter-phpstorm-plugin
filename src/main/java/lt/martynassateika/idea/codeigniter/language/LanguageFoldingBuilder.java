@@ -31,7 +31,8 @@ import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent;
+
+import lt.martynassateika.idea.codeigniter.CodeIgniterProjectSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,7 +49,7 @@ public class LanguageFoldingBuilder extends FoldingBuilderEx {
   public FoldingDescriptor[] buildFoldRegions(@NotNull PsiElement psiElement,
       @NotNull Document document, boolean quick) {
     Project project = psiElement.getProject();
-    if (!CodeIgniterProjectComponent.isEnabled(project)) {
+    if (!CodeIgniterProjectSettings.getInstance(project).isEnabled()) {
       return FoldingDescriptor.EMPTY;
     }
 

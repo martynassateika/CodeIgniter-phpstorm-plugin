@@ -109,6 +109,8 @@
     <psi.referenceContributor
       implementation="lt.martynassateika.idea.codeigniter.view.ViewReferenceContributor"/>
 
+    <applicationService serviceImplementation="lt.martynassateika.idea.codeigniter.CodeIgniterProjectService" />
+    
     <projectConfigurable id="CodeIgniter.SettingsConfigurable"
       instance="lt.martynassateika.idea.codeigniter.ui.CodeIgniterSettingsConfigurable"
       displayName="CodeIgniter"
@@ -119,16 +121,5 @@
   <actions>
     <!-- Add your actions here -->
   </actions>
-
-  <project-components>
-    <component>
-      <implementation-class>lt.martynassateika.idea.codeigniter.CodeIgniterProjectSettings
-      </implementation-class>
-    </component>
-    <component>
-      <implementation-class>lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent
-      </implementation-class>
-    </component>
-  </project-components>
 
 </idea-plugin>

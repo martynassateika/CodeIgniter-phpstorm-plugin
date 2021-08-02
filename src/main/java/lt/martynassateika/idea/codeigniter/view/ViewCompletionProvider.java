@@ -36,7 +36,8 @@ import com.jetbrains.php.lang.psi.elements.ParameterList;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import java.util.List;
 import javax.swing.Icon;
-import lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent;
+
+import lt.martynassateika.idea.codeigniter.CodeIgniterProjectSettings;
 import lt.martynassateika.idea.codeigniter.PhpExtensionUtil;
 import lt.martynassateika.idea.codeigniter.compat.VfsUtilCompat;
 import lt.martynassateika.idea.codeigniter.contributor.BasicFileLookupElement;
@@ -57,7 +58,7 @@ public class ViewCompletionProvider extends CompletionProvider<CompletionParamet
     PsiElement originalPosition = completionParameters.getOriginalPosition();
     if (originalPosition != null) {
       Project project = originalPosition.getProject();
-      if (CodeIgniterProjectComponent.isEnabled(project)) {
+      if (CodeIgniterProjectSettings.getInstance(project).isEnabled()) {
         if (isViewNameElement(originalPosition)) {
           List<PsiFileSystemItem> viewDirectories = CiViewUtil.getViewDirectories(project);
           for (PsiFileSystemItem viewDirectory : viewDirectories) {

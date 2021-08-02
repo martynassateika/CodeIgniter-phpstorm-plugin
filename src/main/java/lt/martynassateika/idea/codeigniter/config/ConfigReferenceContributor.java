@@ -30,7 +30,8 @@ import com.jetbrains.php.lang.psi.elements.AssignmentExpression;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import java.util.ArrayList;
 import java.util.List;
-import lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent;
+
+import lt.martynassateika.idea.codeigniter.CodeIgniterProjectSettings;
 import lt.martynassateika.idea.codeigniter.psi.MyPsiReference;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,7 +52,8 @@ public class ConfigReferenceContributor extends PsiReferenceContributor {
           public PsiReference[] getReferencesByElement(@NotNull PsiElement psiElement,
               @NotNull ProcessingContext processingContext) {
             Project project = psiElement.getProject();
-            if (CodeIgniterProjectComponent.isEnabled(project)) {
+            
+            if (CodeIgniterProjectSettings.getInstance(project).isEnabled()) {
               if (psiElement instanceof StringLiteralExpression) {
                 StringLiteralExpression literalExpression = (StringLiteralExpression) psiElement;
                 if (CiConfigUtil.isConfigItemNameElement(psiElement)) {

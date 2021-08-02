@@ -20,6 +20,8 @@ import com.intellij.openapi.options.SearchableConfigurable;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+
+import com.intellij.openapi.project.Project;
 import lt.martynassateika.idea.codeigniter.CodeIgniterProjectSettings;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nls.Capitalization;
@@ -35,12 +37,12 @@ import org.jetbrains.annotations.Nullable;
 public class CodeIgniterSettingsConfigurable implements SearchableConfigurable {
 
   @NotNull
-  private CodeIgniterProjectSettings settings;
+  private final Project myProject;
 
   private CodeIgniterConfigurablePanel panel;
 
-  public CodeIgniterSettingsConfigurable(@NotNull CodeIgniterProjectSettings settings) {
-    this.settings = settings;
+  public CodeIgniterSettingsConfigurable(@NotNull Project project) {
+    this.myProject = project;
   }
 
   @Nls(capitalization = Capitalization.Title)
@@ -64,16 +66,19 @@ public class CodeIgniterSettingsConfigurable implements SearchableConfigurable {
 
   @Override
   public boolean isModified() {
+    final CodeIgniterProjectSettings settings = CodeIgniterProjectSettings.getInstance(myProject);
     return panel.isModified(settings);
   }
 
   @Override
   public void apply() {
+    final CodeIgniterProjectSettings settings = CodeIgniterProjectSettings.getInstance(myProject);
     panel.apply(settings);
   }
 
   @Override
   public void reset() {
+    final CodeIgniterProjectSettings settings = CodeIgniterProjectSettings.getInstance(myProject);
     panel.reset(settings);
   }
 

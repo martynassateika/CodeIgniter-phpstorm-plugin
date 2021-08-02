@@ -21,7 +21,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElementVisitor;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
-import lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent;
+
+import lt.martynassateika.idea.codeigniter.CodeIgniterProjectSettings;
 import lt.martynassateika.idea.codeigniter.inspection.CodeIgniterInspection;
 import lt.martynassateika.idea.codeigniter.psi.MyPsiReference;
 import org.jetbrains.annotations.Nls;
@@ -47,7 +48,7 @@ public class CodeIgniterViewDoesNotExistInspection extends CodeIgniterInspection
       @Override
       public void visitPhpStringLiteralExpression(StringLiteralExpression expression) {
         Project project = expression.getProject();
-        if (CodeIgniterProjectComponent.isEnabled(project)) {
+        if (CodeIgniterProjectSettings.getInstance(project).isEnabled()) {
           if (CiViewUtil.isArgumentOfLoadView(expression, 0)) {
             // TODO Reference check enough?
             if (!MyPsiReference.referencesElement(expression)) {

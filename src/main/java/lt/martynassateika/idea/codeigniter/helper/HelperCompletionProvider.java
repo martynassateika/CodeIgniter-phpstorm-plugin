@@ -34,7 +34,8 @@ import com.jetbrains.php.lang.PhpLanguage;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import java.util.List;
 import javax.swing.Icon;
-import lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent;
+
+import lt.martynassateika.idea.codeigniter.CodeIgniterProjectSettings;
 import lt.martynassateika.idea.codeigniter.compat.VfsUtilCompat;
 import lt.martynassateika.idea.codeigniter.contributor.BasicFileLookupElement;
 import lt.martynassateika.idea.codeigniter.psi.MyPsiUtil;
@@ -92,7 +93,7 @@ public class HelperCompletionProvider extends CompletionProvider<CompletionParam
   private static boolean shouldShowSuggestions(PsiElement originalPosition) {
     if (originalPosition != null) {
       Project project = originalPosition.getProject();
-      if (CodeIgniterProjectComponent.isEnabled(project)) {
+      if (CodeIgniterProjectSettings.getInstance(project).isEnabled()) {
         StringLiteralExpression literalExpression = MyPsiUtil
             .getParentOfType(originalPosition, StringLiteralExpression.class);
         if (literalExpression != null) {

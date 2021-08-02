@@ -19,10 +19,9 @@ package lt.martynassateika.idea.codeigniter.language;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiReference;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
-import lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent;
+import lt.martynassateika.idea.codeigniter.CodeIgniterProjectSettings;
 import lt.martynassateika.idea.codeigniter.inspection.CodeIgniterInspection;
 import lt.martynassateika.idea.codeigniter.psi.MyPsiReference;
 import org.jetbrains.annotations.Nls;
@@ -48,7 +47,7 @@ public class CodeIgniterTranslationDoesNotExistInspection extends CodeIgniterIns
       @Override
       public void visitPhpStringLiteralExpression(StringLiteralExpression expression) {
         Project project = expression.getProject();
-        if (CodeIgniterProjectComponent.isEnabled(project)) {
+        if (CodeIgniterProjectSettings.getInstance(project).isEnabled()) {
           if (CiLanguageUtil.isLanguageLineKeyElement(expression)) {
             // TODO Reference check enough?
             if (!MyPsiReference.referencesElement(expression)) {

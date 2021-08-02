@@ -16,14 +16,15 @@
 
 package lt.martynassateika.idea.codeigniter;
 
+import com.intellij.openapi.components.Service;
 import com.intellij.openapi.project.Project;
-import lt.martynassateika.idea.codeigniter.compat.MyAbstractProjectComponent;
 
 /**
  * @author martynas.sateika
  * @since 0.1.0
  */
-public class CodeIgniterProjectComponent extends MyAbstractProjectComponent {
+@Service
+public final class CodeIgniterProjectService {
 
   public static boolean isEnabled(Project project) {
     return project.getComponent(CodeIgniterProjectSettings.class).isEnabled();

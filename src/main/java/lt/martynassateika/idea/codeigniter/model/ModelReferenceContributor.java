@@ -26,7 +26,7 @@ import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.PsiReferenceRegistrar;
 import com.intellij.util.ProcessingContext;
 import com.jetbrains.php.lang.psi.elements.StringLiteralExpression;
-import lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent;
+import lt.martynassateika.idea.codeigniter.CodeIgniterProjectSettings;
 import lt.martynassateika.idea.codeigniter.psi.MyPsiReference;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,7 +47,7 @@ public class ModelReferenceContributor extends PsiReferenceContributor {
           public PsiReference[] getReferencesByElement(@NotNull PsiElement psiElement,
               @NotNull ProcessingContext processingContext) {
             Project project = psiElement.getProject();
-            if (CodeIgniterProjectComponent.isEnabled(project)) {
+            if (CodeIgniterProjectSettings.getInstance(project).isEnabled()) {
               if (psiElement instanceof StringLiteralExpression) {
                 if (CiModelUtil.isArgumentOfLoadModel(psiElement, 0)) {
                   StringLiteralExpression stringLiteralExpression = (StringLiteralExpression) psiElement;

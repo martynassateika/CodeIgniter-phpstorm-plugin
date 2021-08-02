@@ -25,7 +25,7 @@ import com.jetbrains.php.lang.psi.elements.ConstantReference;
 import com.jetbrains.php.lang.psi.elements.MethodReference;
 import com.jetbrains.php.lang.psi.elements.Statement;
 import com.jetbrains.php.lang.psi.visitors.PhpElementVisitor;
-import lt.martynassateika.idea.codeigniter.CodeIgniterProjectComponent;
+import lt.martynassateika.idea.codeigniter.CodeIgniterProjectSettings;
 import lt.martynassateika.idea.codeigniter.inspection.CodeIgniterInspection;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -50,7 +50,7 @@ public class CodeIgniterReturnedViewNotUsedInspection extends CodeIgniterInspect
       @Override
       public void visitPhpConstantReference(ConstantReference reference) {
         Project project = reference.getProject();
-        if (CodeIgniterProjectComponent.isEnabled(project)) {
+        if (CodeIgniterProjectSettings.getInstance(project).isEnabled()) {
           if (PhpLangUtil.isTrue(reference)) {
             if (CiViewUtil.isArgumentOfLoadView(reference, 2)) {
               if (isBareStatement(reference)) {
