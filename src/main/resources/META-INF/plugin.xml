@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>lt.martynassateika.idea.codeigniter</id>
   <name>CodeIgniter</name>
-  <version>0.5.2</version>
+  <version>0.6.0</version>
   <vendor url="http://www.martynassateika.lt">Martynas Sateika</vendor>
 
   <description><![CDATA[
@@ -9,6 +9,12 @@
     ]]></description>
 
   <change-notes><![CDATA[
+      0.6 (2021-08-02):
+      <ul>
+          <li>Built-in CodeIgniter helpers</li>
+          <li>Fixed: Compatibility issues with PhpStorm 2021.2 (thanks @ivothgle!)</li>
+      </ul>
+  
       0.5.2 (2020-02-09):
       <ul>
           <li>Fixed: Compatibility issues with PhpStorm 2019.3 (thanks @ivothgle!)</li>
@@ -70,7 +76,7 @@
   </change-notes>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-  <idea-version since-build="145.0"/>
+  <idea-version since-build="201.0"/>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
        on how to target different products -->
@@ -116,6 +122,10 @@
       displayName="CodeIgniter"
       parentId="reference.webide.settings.project.settings.php"
       nonDefaultProject="true"/>
+  </extensions>
+
+  <extensions defaultExtensionNs="com.jetbrains.php">
+    <libraryRoot id="codeigniter" path="/codeigniter/" runtime="false"/>
   </extensions>
 
   <actions>
