@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+    id "org.jetbrains.intellij" version "1.1.4"
+}
+
+group "lt.martynassateika"
+
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'idea'
+
+apply plugin: 'java'
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+apply plugin: 'org.jetbrains.intellij'
+
+intellij {
+    pluginName = 'CodeIgniter'
+    type ='IU'
+    version = '2021.2'
+    updateSinceUntilBuild = false
+    plugins = [
+            "com.jetbrains.php:212.4746.92",
+            'coverage',
+            'webDeployment',
+            'yaml',
+            'CSS',
+            'java-i18n',
+            'properties',
+            'xpath',
+            'java'
+    ]
+}
