@@ -1,0 +1,135 @@
+<idea-plugin>
+  <id>lt.martynassateika.idea.codeigniter</id>
+  <name>CodeIgniter</name>
+  <version>0.6.0</version>
+  <vendor url="http://www.martynassateika.lt">Martynas Sateika</vendor>
+
+  <description><![CDATA[
+      A PhpStorm plugin for CodeIgniter development.
+    ]]></description>
+
+  <change-notes><![CDATA[
+      0.6 (2021-08-02):
+      <ul>
+          <li>Built-in CodeIgniter helpers</li>
+          <li>Fixed: Compatibility issues with PhpStorm 2021.2 (thanks @MaXal!)</li>
+      </ul>
+  
+      0.5.2 (2020-02-09):
+      <ul>
+          <li>Fixed: Compatibility issues with PhpStorm 2019.3 (thanks @ivothgle!)</li>
+      </ul>
+
+      0.5.1 (2019-05-01):
+      <ul>
+          <li>Added: Inspection "Translation does not exist"</li>
+          <li>Fixed: `lang` parameter folded even if no translation exists</li>
+          <li>Fixed: Language reference contributor executes on all strings</li>
+          <li>Fixed: Translation, config item name references work only if quote styles match</li>
+      </ul>
+
+      0.5.0 (2019-04-25):
+      <ul>
+          <li>Completion provider for config item names</li>
+          <li>Reference contributor for config item names</li>
+      </ul>
+
+      0.4.1 (2019-04-20):
+      <ul>
+          <li>Fixed several compatibility issues with PhpStorm 2016.*, 2017.*</li>
+      </ul>
+
+      0.4.0 (2019-03-29):
+      <ul>
+          <li>Completion provider for model files</li>
+          <li>Reference contributor for model files</li>
+          <li>Plugin logo</li>
+      </ul>
+
+      0.3.0 (2019-01-08):
+      <ul>
+          <li>Completion provider for helper files</li>
+          <li>Reference contributor for helper files</li>
+      </ul>
+
+      0.2.1 (2018-10-10):
+      <ul>
+          <li>Rename plugin to "CodeIgniter"</li>
+      </ul>
+
+      0.2.0 (2018-10-09):
+      <ul>
+          <li>Completion provider for view files</li>
+          <li>Reference contributor for view files</li>
+          <li>Inspection "Returned view not used"</li>
+          <li>Inspection "Simplifiable view name"</li>
+          <li>Inspection "View does not exist"</li>
+      </ul>
+
+      0.1.0 (2018-10-07):
+      <ul>
+          <li>Completion provider for translations</li>
+          <li>Reference contributor for translations</li>
+          <li>Folding builder for translations</li>
+      </ul>
+    ]]>
+  </change-notes>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+  <idea-version since-build="201.0"/>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+  <depends>com.jetbrains.php</depends>
+  <depends>com.intellij.modules.platform</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <inspectionToolProvider
+      implementation="lt.martynassateika.idea.codeigniter.inspection.CiInspectionToolProvider"/>
+    <completion.contributor language="PHP"
+      implementationClass="lt.martynassateika.idea.codeigniter.contributor.MyCompletionContributor"/>
+
+    <!-- Configuration -->
+    <fileBasedIndex
+      implementation="lt.martynassateika.idea.codeigniter.config.ConfigFileIndex"/>
+    <psi.referenceContributor language="PHP"
+      implementation="lt.martynassateika.idea.codeigniter.config.ConfigReferenceContributor"/>
+
+    <!-- Helpers -->
+    <psi.referenceContributor
+      implementation="lt.martynassateika.idea.codeigniter.helper.HelperReferenceContributor"/>
+
+    <!-- Language helper -->
+    <fileBasedIndex
+      implementation="lt.martynassateika.idea.codeigniter.language.LanguageFileIndex"/>
+    <psi.referenceContributor language="PHP"
+      implementation="lt.martynassateika.idea.codeigniter.language.LanguageReferenceContributor"/>
+    <lang.foldingBuilder language="PHP"
+      implementationClass="lt.martynassateika.idea.codeigniter.language.LanguageFoldingBuilder"/>
+
+    <!-- Models -->
+    <psi.referenceContributor language="PHP"
+      implementation="lt.martynassateika.idea.codeigniter.model.ModelReferenceContributor"/>
+
+    <!-- Views -->
+    <psi.referenceContributor
+      implementation="lt.martynassateika.idea.codeigniter.view.ViewReferenceContributor"/>
+
+    <applicationService serviceImplementation="lt.martynassateika.idea.codeigniter.CodeIgniterProjectService" />
+    
+    <projectConfigurable id="CodeIgniter.SettingsConfigurable"
+      instance="lt.martynassateika.idea.codeigniter.ui.CodeIgniterSettingsConfigurable"
+      displayName="CodeIgniter"
+      parentId="reference.webide.settings.project.settings.php"
+      nonDefaultProject="true"/>
+  </extensions>
+
+  <extensions defaultExtensionNs="com.jetbrains.php">
+    <libraryRoot id="codeigniter" path="/codeigniter/" runtime="false"/>
+  </extensions>
+
+  <actions>
+    <!-- Add your actions here -->
+  </actions>
+
+</idea-plugin>
