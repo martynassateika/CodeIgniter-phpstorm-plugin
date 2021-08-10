@@ -12,7 +12,7 @@
       0.6 (2021-08-02):
       <ul>
           <li>Built-in CodeIgniter helpers</li>
-          <li>Fixed: Compatibility issues with PhpStorm 2021.2 (thanks @ivothgle!)</li>
+          <li>Fixed: Compatibility issues with PhpStorm 2021.2 (thanks @MaXal!)</li>
       </ul>
   
       0.5.2 (2020-02-09):
