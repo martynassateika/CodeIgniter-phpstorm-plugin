@@ -3,6 +3,7 @@
 
 CodeIgniter Plugin for PhpStorm
 ========================
+:warning: This plugin is now [maintained](https://github.com/JetBrains/CodeIgniter-phpstorm-plugin) by JetBrains.
 
 Installation
 ---------------------
